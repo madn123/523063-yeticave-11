@@ -131,7 +131,7 @@ function edit($price) {
 	                        <div class="lot__rate">
 	                            <span class="lot__amount">Стартовая цена</span>
 	                            <span class="lot__cost">
-	                            	<?=$edit_price = edit($product['price']);?>
+	                            	<?=edit($product['price']);?>
 	                            </span>
 	                        </div>
 	                        <div class="lot__timer timer">
