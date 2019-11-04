@@ -1,0 +1,37 @@
+CREATE DATABASE yeticave
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci;
+
+USE yeticave;
+
+CREATE TABLE categories (
+id INT AUTO_INCREMENT PRIMARY KEY,
+category_name CHAR UNIQUE,
+category_code CHAR UNIQUE
+);
+
+CREATE TABLE items (
+id INT AUTO_INCREMENT PRIMARY KEY,
+date_creation DATETIME NOT NULL,
+name CHAR NOT NULL UNIQUE,
+description VARCHAR(128) NOT NULL,
+image VARCHAR(128) NOT NULL,
+start_price INT NOT NULL,
+completion_date DATETIME NOT NULL,
+step_bet INT NOT NULL
+);
+
+CREATE TABLE bets (
+id INT AUTO_INCREMENT PRIMARY KEY,
+date_creation DATETIME NOT NULL,
+price INT NOT NULL
+);
+
+CREATE TABLE users (
+id INT AUTO_INCREMENT PRIMARY KEY,
+date_registration DATETIME NOT NULL,
+email CHAR NOT NULL UNIQUE,
+name CHAR NOT NULL,
+pass CHAR NOT NULL,
+contacts VARCHAR(128) NOT NULL
+);
