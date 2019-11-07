@@ -3,8 +3,8 @@
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
         	<?php foreach ($categories as $category): ?>
-		        <li class="promo__item promo__item--boards">
-		            <a class="promo__link" href="pages/all-lots.html"><?=htmlspecialchars ($category); ?></a>
+		        <li class="promo__item promo__item--<?=($category['category_code']); ?>">
+		            <a class="promo__link" href="pages/all-lots.html"><?=htmlspecialchars ($category['category_name']); ?></a>
 		        </li>
 		    <?php endforeach ?>
         </ul>
@@ -14,23 +14,23 @@
             <h2>Открытые лоты</h2>
         </div>
         <ul class="lots__list">
-        	<?php foreach ($products as $product): ?>
+        	<?php foreach ($items as $item): ?>
 	            <li class="lots__item lot">
 	                <div class="lot__image">
-	                    <img src="<?=$product['img']; ?>" width="350" height="260" alt="">
+	                    <img src="<?=$item['image']; ?>" width="350" height="260" alt="">
 	                </div>
 	                <div class="lot__info">
-	                    <span class="lot__category"><?=htmlspecialchars ($product['cats']); ?></span>
-	                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=htmlspecialchars ($product['name']); ?></a></h3>
+	                    <span class="lot__category"><?=htmlspecialchars ($item['category_name']); ?></span>
+	                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=htmlspecialchars ($item['name']); ?></a></h3>
 	                    <div class="lot__state">
 	                        <div class="lot__rate">
 	                            <span class="lot__amount">Стартовая цена</span>
 	                            <span class="lot__cost">
-	                            	<?=edit($product['price']);?>
+	                            	<?=edit($item['start_price']);?>
 	                            </span>
 	                        </div>
-	                        <div class="lot__timer timer <?php if (conver_time($product['date']) < 1): ?> timer--finishing <?php endif ?>">
-	                            <?=conver_time($product['date']);?>
+	                        <div class="lot__timer timer <?php if (conver_time($item['date']) < 1): ?> timer--finishing <?php endif ?>">
+	                            <?=conver_time($item['completion_date']);?>
 	                        </div>
 	                    </div>
 	                </div>

@@ -1,51 +1,7 @@
 <?php
 $is_auth = rand(0, 1);
 $user_name = 'Кирилл';
-$categories = ['Доски и лыжи' , 'Крепления' , 'Ботинки' , 'Одежда' , 'Инструменты' , 'Разное'];
-$products = [
-	[
-		'name' => '2014 Rossignol District Snowboard',
-		'cats' => 'Доски и лыжи',
-		'price' => '10999',
-		'img' => 'img/lot-1.jpg',
-		'date' => '2019-11-01'
-	],
-	[
-		'name' => 'DC Ply Mens 2016/2017 Snowboard',
-		'cats' => 'Доски и лыжи',
-		'price' => '159999',
-		'img' => 'img/lot-2.jpg',
-		'date' => '2019-11-03'
-	],
-	[
-		'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-		'cats' => 'Крепления',
-		'price' => '8000',
-		'img' => 'img/lot-3.jpg',
-		'date' => '2019-11-05'
-	],
-	[
-		'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-		'cats' => 'Ботинки',
-		'price' => '10999',
-		'img' => 'img/lot-4.jpg',
-		'date' => '2019-11-02'
-	],
-	[
-		'name' => 'Куртка для сноуборда DC Mutiny Charocal',
-		'cats' => 'Одежда',
-		'price' => '7500',
-		'img' => 'img/lot-5.jpg',
-		'date' => '2019-11-04'
-	],
-	[
-		'name' => 'Маска Oakley Canopy',
-		'cats' => 'Разное',
-		'price' => '5400',
-		'img' => 'img/lot-6.jpg',
-		'date' => '2019-11-03'
-	],
-];
+
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
@@ -84,17 +40,46 @@ function include_template($name, $data) {
     return $result;
 }
 
+$link = mysqli_connect("localhost", "root", "", "yeticave");
+mysqli_set_charset($link, "utf8");
+if (!$link) {
+    $error = mysqli_connect_error();
+    $content = include_template('error.php', ['error' => $error]);
+}
+else {
+    $sql = 'SELECT id, category_name, category_code FROM categories';
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        $content = include_template('error.php', ['error' => $error]);
+    }
+    $sql = 'SELECT name, start_price, image, completion_date, category_name FROM items i'
+         . 'JOIN categories c ON i.category_id = c.id'
+         . 'ORDER BY date_creation ASC DESC LIMIT 9';
+
+    if ($res = mysqli_query($link, $sql)) {
+        $items = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+    else {
+        $content = include_template('error.php', ['error' => mysqli_error($link)]);
+    }
+}
+
 $page_content = include_template('main.php', [
 	'categories' => $categories,
-	'products' => $products
+	'items' => $items
 ]);
 $layout_content = include_template('layout.php', [
 	'content' => $page_content,
 	'categories' => $categories,
 	'title' => 'YetiCave - Главная страница',
 	'user_name' => $user_name,
-	'is_auth' => $is_auth
+	'is_auth' => $is_auth,
+	'error' => $error
 ]);
-
 print($layout_content);
 
