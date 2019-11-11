@@ -17,30 +17,24 @@ if (!$link) {
     die();
 }
 
-$sql = 'SELECT id, category_name, category_code FROM categories';
+$sql = 'SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC';
 
 $result = mysqli_query($link, $sql);
 
 if (!$result) {
-    $error = mysqli_connect_error();
-    $content = include_template('error.php', ['error' => $error]);
-    print($content);
-    die();
+    $error = debug_error($link);
 }
 
 $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$sql = 'SELECT name, start_price, image, completion_date, category_name FROM items i'
-     . 'JOIN categories c ON i.category_id = c.id'
-     . 'ORDER BY date_creation ASC DESC LIMIT 9';
+$sql = 'SELECT name, start_price, image, completion_date, c.category_name FROM items i '
+    . 'JOIN categories c ON i.category_id = c.id '
+    . 'ORDER BY date_creation ASC LIMIT 9';
 
 $res = mysqli_query($link, $sql);
 
 if (!$res) {
-    $error = mysqli_connect_error();
-    $content = include_template('error.php', ['error' => $error]);
-    print($content);
-    die();
+    $error = debug_error($link);
 }
 
 $items = mysqli_fetch_all($res, MYSQLI_ASSOC);

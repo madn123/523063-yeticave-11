@@ -34,3 +34,10 @@ function include_template($name, $data) {
 
     return $result;
 }
+
+function debug_error($link) {
+    $error = mysqli_error($link);
+    $content = include_template('error.php', ['error' => $error]);
+    print($content);
+
+}
