@@ -1,6 +1,7 @@
 <?php
 require_once 'functions.php';
 
+
 $is_auth = rand(0, 1);
 $user_name = 'Кирилл';
 
@@ -26,9 +27,9 @@ if (!$result) {
 }
 
 $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-$sql = 'SELECT name, start_price, image, completion_date, c.category_name FROM items i '
-    . 'JOIN categories c ON i.category_id = c.id '
+$sort_field = 'category_id';
+$sql = 'SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i '
+    . 'JOIN categories c ON i.' . $sort_field  . ' = c.id '
     . 'ORDER BY date_creation ASC LIMIT 9';
 
 $res = mysqli_query($link, $sql);
@@ -53,5 +54,24 @@ $layout_content = include_template('layout.php', [
 	'error' => $error
 ]);
 
+
 print($layout_content);
 
+$num = '4';
+
+$sql = 'SELECT * FROM items i '
+    . 'JOIN categories c ON i.category_id = c.id '
+    . 'WHERE i.id =' . $num . '';
+
+$res = mysqli_query($link, $sql);
+if (!$res) {
+    $error = debug_error($link);
+}
+
+$lots = mysqli_fetch_assoc($res);
+
+include_template('lot.php', [
+    'categories' => $categories,
+    'lots' => $lots,
+    'error' => $error
+]);
