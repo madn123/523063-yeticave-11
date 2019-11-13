@@ -12,7 +12,7 @@
 <header class="main-header">
     <div class="main-header__container container">
         <h1 class="visually-hidden">YetiCave</h1>
-        <a class="main-header__logo">
+        <a class="main-header__logo"  href="/">
             <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
         <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
@@ -39,13 +39,11 @@
   				</ul>
         	<?php endif ?>	
         </nav>
-
+        
     </div>
 </header>
 
-<main class="container">
     <?=$content;?>
-</main>
 
 </div>
 
