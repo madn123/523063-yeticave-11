@@ -35,6 +35,12 @@ function include_template($name, $data) {
     return $result;
 }
 
+function link_error($link) {
+    $error = mysqli_connect_error($link);
+    $content = include_template('error.php', ['error' => $error]);
+    print($content);
+}
+
 function debug_error($link) {
     $error = mysqli_error($link);
     $content = include_template('error.php', ['error' => $error]);

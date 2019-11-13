@@ -16,9 +16,17 @@ if (!$result) {
 
 $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$sql = 'SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i '
+if (!isset($_GET['id'])) {
+    $content = include_template('404.php', []);
+    print($content);
+    die();
+}
+
+$id = intval($_GET['id']);
+
+$sql = 'SELECT * FROM items i '
     . 'JOIN categories c ON i.category_id = c.id '
-    . 'ORDER BY date_creation ASC LIMIT 6';
+    . 'WHERE i.id =' . $id . '';
 
 $res = mysqli_query($link, $sql);
 
@@ -26,11 +34,18 @@ if (!$res) {
     $error = debug_error($link);
 }
 
-$items = mysqli_fetch_all($res, MYSQLI_ASSOC);
+$lots = mysqli_fetch_assoc($res);
 
-$page_content = include_template('main.php', [
-	'categories' => $categories,
-	'items' => $items
+if (empty($lots)) {
+    $content = include_template('404.php',[]);
+    print($content);
+    die();
+}
+
+$page_content = include_template('lot.php', [
+    'lots' => $lots,
+    'categories' => $categories,
+    'error' => $error
 ]);
 
 $layout_content = include_template('layout.php', [
@@ -42,5 +57,6 @@ $layout_content = include_template('layout.php', [
 	'error' => $error
 ]);
 
-
 print($layout_content);
+
+

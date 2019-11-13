@@ -43,9 +43,7 @@
     </div>
 </header>
 
-<main class="container">
     <?=$content;?>
-</main>
 
 </div>
 
