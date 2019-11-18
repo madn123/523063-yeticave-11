@@ -92,3 +92,33 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
     return $stmt;
 }
+
+function getPostVal($name) {
+    return filter_input(INPUT_POST, $name);
+}
+
+function validateCategory($id, $allowed_list) {
+    if (!in_array($id, $allowed_list)) {
+        return "Указана несуществующая категория";
+    }
+
+    return null;
+}
+
+function validateLength($value, $min, $max) {
+    if ($value) {
+        $len = strlen($value);
+        if ($len < $min or $len > $max) {
+            return "Значение должно быть от $min до $max символов";
+        }
+    }
+
+    return null;
+}
+
+function is_date_valid(string $date) : bool {
+    $format_to_check = 'Y-m-d';
+    $dateTimeObj = date_create_from_format($format_to_check, $date);
+
+    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+}
