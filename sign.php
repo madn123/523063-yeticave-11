@@ -45,24 +45,28 @@ if (empty($errors)) {
     $res = mysqli_query($link, $sql);
 
     if (mysqli_num_rows($res) > 0) {
-        $errors[$email] = 'Пользователь с этим email уже зарегистрирован';
+        $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
     }
-    else {
-        $pass = password_hash($form['pass'], PASSWORD_DEFAULT);
+}
 
-        $sql = 'INSERT INTO users (dt_add, email, name, pass, contacts) VALUES (NOW(), ?, ?, ?, ?)';
-        $stmt = db_get_prepare_stmt($link, $sql, [
-            $form['email'], 
-            $form['name'], 
-            $pass, 
-            $form['contacts']]);
-        $res = mysqli_stmt_execute($stmt);
-    }
+$pass = password_hash($form['pass'], PASSWORD_DEFAULT);
 
-    if ($res && empty($errors)) {
-        header("Location: /login.php");
-        exit();
-    }
+$sql = 'INSERT INTO users (dt_add, email, name, pass, contacts) VALUES (NOW(), ?, ?, ?, ?)';
+$stmt = db_get_prepare_stmt($link, $sql, [
+    trim($form['email']), 
+    $form['name'], 
+    $pass, 
+    $form['contacts']]);
+$res = mysqli_stmt_execute($stmt);
+
+if(!$res){
+debug_error($link);
+die();
+}
+
+if ($res && empty($errors)) {
+    header("Location: /login.php");
+    exit();
 }
 
 $page_content = include_template('sign-up.php', [

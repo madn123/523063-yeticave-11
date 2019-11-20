@@ -9,11 +9,11 @@
       </ul>
     </nav>
 
-    <form class="form form--add-lot container form--invalid" action="add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+    <form class="form form--add-lot container form--invalid" action="add.php" method="post" enctype="multipart/form-data">
       <h2>Добавление лота</h2>
       <div class="form__container-two">
       	<?php $classname = isset($errors['name']) ? "form__item--invalid " : ""; ?>
-        <div class="form__item <?= $classname; ?>"> <!-- form__item--invalid -->
+        <div class="form__item <?= $classname; ?>">
           <label for="lot-name">Наименование <sup>*</sup></label>
           <input type="text" name="name" placeholder="Введите наименование лота" value="<?= getPostVal('name'); ?>">
           <span class="form__error">Введите наименование лота</span>
@@ -23,8 +23,9 @@
         <div class="form__item <?= $classname; ?>">
           <label for="category">Категория <sup>*</sup></label>
           <select id="category" name="category_id">
+            <option>Выберите категорию</option>
           	<?php foreach ($categories as $category): ?>
-              	<option value="<?=$category['id']; ?>"><?=$category['category_name']; ?></option>
+              <option value="<?=$category['id']; ?>" <?= getPostVal('category_id') == $category['id'] ? 'selected="true"' : '';?>><?=$category['category_name']; ?></option>
         	<?php endforeach ?>
           </select>
           <span class="form__error">Выберите категорию</span>
@@ -63,7 +64,7 @@
           <span class="form__error">Введите шаг ставки</span>
         </div>
 
-        <?php $classname = isset($errors['step_bet']) ? "form__item--invalid " : ""; ?>
+        <?php $classname = isset($errors['completion_date']) ? "form__item--invalid " : ""; ?>
         <div class="form__item <?= $classname; ?>">
           <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
           <input class="form__input-date" id="lot-date" type="text" name="completion_date" placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= getPostVal('completion_date'); ?>"> 
@@ -77,7 +78,7 @@
            <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
            <ul>
              <?php foreach ($errors as $val): ?>
-                <li><strong><?= $val; ?>:</strong></li>
+                <li><strong><?= $val; ?></strong></li>
              <?php endforeach; ?>
            </ul>
         </div>

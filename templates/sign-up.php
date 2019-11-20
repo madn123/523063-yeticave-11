@@ -51,10 +51,6 @@
            </ul>
         </div>
      <?php endif; ?>
-
-     <?php
-     print_r($errors);
-     ?>
     <button type="submit" class="button">Зарегистрироваться</button>
     <a class="text-link" href="#">Уже есть аккаунт</a>
   </form>

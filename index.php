@@ -19,7 +19,7 @@ $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 $sql = 'SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i '
     . 'JOIN categories c ON i.category_id = c.id '
-    . 'ORDER BY date_creation ASC LIMIT 6';
+    . 'ORDER BY date_creation DESC LIMIT 6';
 
 $res = mysqli_query($link, $sql);
 

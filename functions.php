@@ -116,6 +116,29 @@ function validateLength($value, $min, $max) {
     return null;
 }
 
+function validateNumber($value) {
+    if (!is_numeric($value)){
+        return 'Введите число';
+    }
+
+    if ((int) $value != $value){
+        return 'Число должно быть целым';
+    }
+
+    return null;
+}
+
+function validateDate(string $date){
+    if (!is_date_valid($date)){
+        return 'Неверный формат даты';
+    }
+    if (strtotime($date) < time()){
+        return "Выберите будущую дату";
+    }
+    
+    return null;
+}
+
 function is_date_valid(string $date) : bool {
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
