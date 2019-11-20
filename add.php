@@ -1,23 +1,9 @@
 <?php
 require_once 'functions.php';
 require_once 'config.php';
-
-if (!$link) {
-    $error = mysqli_error($link);
-}
-
-$sql = 'SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC';
-
-$result = mysqli_query($link, $sql);
+require_once 'include.php';
 
 $cats_ids = [];
-
-if (!$result) {
-    $error = debug_error($link);
-}
-
-$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
 $cats_ids = array_column($categories, 'id');
 
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
@@ -76,12 +62,12 @@ foreach ($lots as $key => $value) {
 
 $errors = array_filter($errors);
 
-$errors['file'] = 'Вы не загрузили файл';
-if( isset($_FILES['images']['name']) and !empty($_FILES['image']['name']) ){
+$errors['image'] = 'Вы не загрузили файл';
+if( isset($_FILES['image']['name']) and !empty($_FILES['image']['name']) ){
+    unset($errors['image']);
     $tmp_name = $_FILES['image']['tmp_name'];
     $path = $_FILES['image']['name'];
     $filename = uniqid();
-
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $file_type = finfo_file($finfo, $tmp_name);
 
@@ -102,7 +88,6 @@ if( isset($_FILES['images']['name']) and !empty($_FILES['image']['name']) ){
         $errors['image'] = 'Не верный тип изображения';
     }
 }
-
 
 if (count($errors) > 0) {
     $page_content = include_template('add-lot.php', [

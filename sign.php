@@ -1,22 +1,7 @@
 <?php
 require_once 'functions.php';
 require_once 'config.php';
-
-if (!$link) {
-    $error = mysqli_error($link);
-    die();
-}
-
-$sql = 'SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC';
-
-$result = mysqli_query($link, $sql);
-
-if (!$result) {
-    $error = debug_error($link);
-    die();
-}
-
-$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+require_once 'include.php';
 
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
     $page_content = include_template('sign-up.php', ['categories' => $categories]);
@@ -39,7 +24,10 @@ foreach ($required as $field) {
     }
 }
 
-if (empty($errors)) {
+if (!empty($form['email'])) {
+    if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
+    $errors['email'] = 'Email должен быть корректным';
+    } 
     $email = mysqli_real_escape_string($link, $form['email']);
     $sql = "SELECT id FROM users WHERE email = '$email'";
     $res = mysqli_query($link, $sql);
@@ -47,6 +35,20 @@ if (empty($errors)) {
     if (mysqli_num_rows($res) > 0) {
         $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
     }
+}
+
+if (!empty($errors)) {
+    $page_content = include_template('sign-up.php', [
+        'categories' => $categories,
+        'errors' => $errors
+    ]);
+    $layout_content = include_template('layout.php', [
+        'content'    => $page_content,
+        'categories' => $categories,
+        'title'      => 'Регистрация'
+    ]);
+    print($layout_content);
+    die();    
 }
 
 $pass = password_hash($form['pass'], PASSWORD_DEFAULT);

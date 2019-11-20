@@ -1,13 +1,4 @@
-﻿<main>
-  <nav class="nav">
-      <ul class="nav__list container">
-        <?php foreach ($categories as $category): ?>
-              <li class="nav__item">
-                  <a href="pages/all-lots.html"><?=$category['category_name']; ?></a>
-              </li>
-        <?php endforeach ?>
-      </ul>
-    </nav>
+﻿<?php require_once 'nav.php'; ?>
     
   <form class="form container form--invalid" action="sign.php" method="post" autocomplete="off">
     <h2>Регистрация нового аккаунта</h2>
@@ -46,7 +37,7 @@
            <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
            <ul>
              <?php foreach ($errors as $val): ?>
-                <li><strong><?= $val; ?>:</strong></li>
+                <li><strong><?= $val; ?></strong></li>
              <?php endforeach; ?>
            </ul>
         </div>
