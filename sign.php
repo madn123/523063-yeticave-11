@@ -1,6 +1,4 @@
 <?php
-require_once 'functions.php';
-require_once 'config.php';
 require_once 'include.php';
 
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
@@ -24,17 +22,9 @@ foreach ($required as $field) {
     }
 }
 
-if (!empty($form['email'])) {
-    if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
-    $errors['email'] = 'Email должен быть корректным';
-    } 
-    $email = mysqli_real_escape_string($link, $form['email']);
-    $sql = "SELECT id FROM users WHERE email = '$email'";
-    $res = mysqli_query($link, $sql);
-
-    if (mysqli_num_rows($res) > 0) {
-        $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
-    }
+$error = validateEmail($form['email'], $link);
+if ($error != null) {
+    $errors['email'] = $error;
 }
 
 if (!empty($errors)) {
@@ -62,8 +52,8 @@ $stmt = db_get_prepare_stmt($link, $sql, [
 $res = mysqli_stmt_execute($stmt);
 
 if(!$res){
-debug_error($link);
-die();
+    debug_error($link);
+    die();
 }
 
 if ($res && empty($errors)) {

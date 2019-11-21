@@ -1,21 +1,5 @@
 <?php
-require_once 'functions.php';
-require_once 'config.php';
-require_once 'uploads/.gitkeep';
-
-if (!$link) {
-    $error = mysqli_error($link);
-}
-
-$sql = 'SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC';
-
-$result = mysqli_query($link, $sql);
-
-if (!$result) {
-    $error = debug_error($link);
-}
-
-$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+require_once 'include.php';
 
 $sql = 'SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i '
     . 'JOIN categories c ON i.category_id = c.id '
