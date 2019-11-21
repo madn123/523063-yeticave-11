@@ -1,26 +1,7 @@
 <?php
 require_once 'functions.php';
 require_once 'config.php';
-
-if (!$link) {
-    $error = mysqli_error($link);
-}
-
-$sql = 'SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC';
-
-$result = mysqli_query($link, $sql);
-
-if (!$result) {
-    $error = debug_error($link);
-}
-
-$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-if (!isset($_GET['id'])) {
-    $content = include_template('404.php', []);
-    print($content);
-    die();
-}
+require_once 'include.php';
 
 $id = intval($_GET['id']);
 
