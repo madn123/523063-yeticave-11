@@ -27,10 +27,6 @@ if ($error != null) {
     $errors['email'] = $error;
 }
 
-$email = mysqli_real_escape_string($link, $form['email']);
-$sql = "SELECT id FROM users WHERE email = '$email'";
-$res = mysqli_query($link, $sql);
-
 if (!empty($errors)) {
     $page_content = include_template('sign-up.php', [
         'categories' => $categories,
