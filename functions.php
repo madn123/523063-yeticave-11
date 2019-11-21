@@ -145,3 +145,25 @@ function is_date_valid(string $date) : bool {
 
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
+
+function user_exist_by_email($email, $link){
+    $email = mysqli_real_escape_string($link, $email);
+    $sql = "SELECT id FROM users WHERE email = '$email'";
+    $res = mysqli_query($link, $sql);
+    return mysqli_num_rows($res) > 0;
+}
+
+function validateEmail($email, $link){
+    if(empty($email)){
+        return 'Пустой email';
+    }
+    
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return 'Введите корректный email';
+    }
+
+    if(user_exist_by_email($email, $link)){
+        return 'Такой email уже есть';
+    }
+    return null;
+}
