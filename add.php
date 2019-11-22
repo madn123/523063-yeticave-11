@@ -1,6 +1,11 @@
 <?php
 require_once 'include.php';
 
+if (!isset($_SESSION['user'])) {
+ header("Location: /");
+ exit();
+}
+
 $cats_ids = [];
 $cats_ids = array_column($categories, 'id');
 

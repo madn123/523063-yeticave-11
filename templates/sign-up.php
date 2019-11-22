@@ -33,18 +33,16 @@
 
 
     <?php if (isset($errors)): ?>
-        <div class="form__errors">
-           <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
-           <ul>
-             <?php foreach ($errors as $val): ?>
-                <li><strong><?= $val; ?></strong></li>
-             <?php endforeach; ?>
-           </ul>
-        </div>
-     <?php endif; ?>
- <?php
-     print_r($errors);
-     ?>
+      <div class="form__errors">
+        <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
+        <ul>
+          <?php foreach ($errors as $val): ?>
+            <li><strong><?= $val; ?></strong></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    <?php endif; ?>
+     
     <button type="submit" class="button">Зарегистрироваться</button>
     <a class="text-link" href="#">Уже есть аккаунт</a>
   </form>
