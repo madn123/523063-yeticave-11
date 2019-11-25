@@ -40,7 +40,7 @@ if (!empty($errors)) {
     $layout_content = include_template('layout.php', [
         'content'    => $page_content,
         'categories' => $categories,
-        'title'      => 'Ошбка регистрации'
+        'title'      => 'Ошибка регистрации'
     ]);
     print($layout_content);
     die();    

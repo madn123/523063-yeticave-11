@@ -2,30 +2,25 @@
 require_once 'include.php';
 
 if (isset($_SESSION['user'])) {
-        header("Location: /index.php");
+        header("Location: /");
         exit();
 }
 
-if($_SERVER['REQUEST_METHOD'] != 'POST') {
-    $page_content = include_template('login.php', ['categories' => $categories]);
-    $layout_content = include_template('layout.php', [
-        'content'    => $page_content,
-        'categories' => $categories,
-        'title'      => 'Авторизация'
-    ]);
-    print($layout_content);
-    die();    
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $form = $_POST;
+    $required = ['email', 'pass'];
+    $errors = [];
+
+    foreach ($required as $field) {
+        if (empty($form[$field])) {
+            $errors[$field] = "Не заполнено поле " . $field;
+        }
+    }
 }
 
-$form = $_POST;
-
-$required = ['email', 'pass'];
-$errors = [];
-
-foreach ($required as $field) {
-    if (empty($form[$field])) {
-        $errors[$field] = "Не заполнено поле " . $field;
-    }
+if(!empty($errors) or $_SERVER['REQUEST_METHOD'] != 'POST') {
+    show_form('login.php', 'Авторизация', $categories, $errors);
+    die();    
 }
 
 $email = mysqli_real_escape_string($link, $form['email']);
@@ -39,7 +34,7 @@ if(!$res){
 
 $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 if (!$user){
-	$errors['email'] = 'Такой пользователь не найден';
+	$errors['email'] = 'Не верный логин или пароль';
 }
 
 if (empty($errors)) {
@@ -47,21 +42,12 @@ if (empty($errors)) {
 		$_SESSION['user'] = $user;
 	}
 	else {
-		$errors['pass'] = 'Неверный пароль';
+		$errors['pass'] = 'Не верный логин или пароль';
 	}
 }
 
 if (!empty($errors)) {
-    $page_content = include_template('login.php', [
-        'categories' => $categories,
-        'errors' => $errors
-    ]);
-    $layout_content = include_template('layout.php', [
-        'content'    => $page_content,
-        'categories' => $categories,
-        'title'      => 'Ошибка авторизации'
-    ]);
-    print($layout_content);
+    show_form('login.php', 'Ошика авторизации', $categories, $errors);
     die();    
 }
 
