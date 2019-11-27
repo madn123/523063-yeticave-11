@@ -94,7 +94,6 @@ if( isset($_FILES['image']['name']) and !empty($_FILES['image']['name']) ){
 
 if (!empty($errors)) {
     $page_content = include_template('add-lot.php', [
-        'lots' => $lots, 
         'errors' => $errors, 
         'categories' => $categories
     ]);
@@ -109,7 +108,7 @@ if (!empty($errors)) {
 
 $user_id = $_SESSION['user']['id'];
 
-$sql = 'INSERT INTO items (date_creation, category_id, creator_user_id, name, description, image, completion_date, start_price, step_bet) VALUES (NOW(), ?, $user_id, ?, ?, ?, ?, ?, ?)';
+$sql = 'INSERT INTO items (date_creation, category_id, creator_user_id, name, description, image, completion_date, start_price, step_bet) VALUES (NOW(), ?,' . $user_id . ', ?, ?, ?, ?, ?, ?)';
 $stmt = db_get_prepare_stmt($link, $sql, [
     $lots['category_id'],
     $lots['name'], 

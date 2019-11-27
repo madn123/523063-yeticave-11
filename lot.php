@@ -11,6 +11,7 @@ $res = mysqli_query($link, $sql);
 
 if (!$res) {
     $error = debug_error($link);
+    die();
 }
 
 $lots = mysqli_fetch_assoc($res);
