@@ -22,17 +22,5 @@ if (empty($lots)) {
     die();
 }
 
-$page_content = include_template('lot.php', [
-    'lots' => $lots,
-    'categories' => $categories,
-]);
-
-$layout_content = include_template('layout.php', [
-	'content' => $page_content,
-	'categories' => $categories,
-	'title' => 'Название лота'
-]);
-
-print($layout_content);
-
-
+print render('lot', 'Название лота', ['lots' => $lots]);
+die();

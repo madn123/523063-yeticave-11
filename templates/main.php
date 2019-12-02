@@ -5,7 +5,7 @@
 	    <ul class="promo__list">
 	        <?php foreach ($categories as $category): ?>
 			    <li class="promo__item promo__item--<?=($category['category_code']); ?>">
-			        <a class="promo__link" href="all-lots.php"><?=$category['category_name']; ?></a>
+			        <a class="promo__link" href="all-lots.php?category=<?=$category['id']; ?>"><?=$category['category_name']; ?></a>
 			    </li>
 			<?php endforeach ?>
 	    </ul>
@@ -32,8 +32,8 @@
 		                            	<?=edit($item['start_price']);?>
 		                            </span>
 		                        </div>
-		                        <div class="lot__timer timer <?php if (conver_time($item['completion_date']) < 1): ?> timer--finishing <?php endif ?>">
-		                            <?=conver_time($item['completion_date']);?>
+		                        <div class="lot__timer timer <?php if (convert_time($item['completion_date']) < 1): ?> timer--finishing <?php endif ?>">
+		                            <?=convert_time($item['completion_date']);?>
 		                        </div>
 		                    </div>
 		                </div>

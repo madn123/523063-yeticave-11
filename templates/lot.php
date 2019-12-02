@@ -16,8 +16,8 @@
 
         <div class="lot-item__right">
           <div class="lot-item__state" <?php if (!isset($_SESSION['user'])): ?> style="display:none" <?php endif ?>>
-            <div class="lot-item__timer timer <?php if (conver_time($lots['completion_date']) < 1): ?> timer--finishing <?php endif ?>">
-              <?=conver_time($lots['completion_date']);?>
+            <div class="lot-item__timer timer <?php if (convert_time($lots['completion_date']) < 1): ?> timer--finishing <?php endif ?>">
+              <?=convert_time($lots['completion_date']);?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
@@ -37,7 +37,7 @@
               <button type="submit" class="button">Сделать ставку</button>
             </form>
           </div>
-          
+
           <div class="history">
             <h3>История ставок (<span>10</span>)</h3>
             <table class="history__list">

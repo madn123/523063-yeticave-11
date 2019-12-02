@@ -1,14 +1,14 @@
 <?php
 
-function conver_time($с_time) {
-    $diff = strtotime($с_time) - time();
+function convert_time($c_time) {
+    $diff = strtotime($c_time) - time();
     $hours = floor($diff / 60 / 60);
     $seconds = $diff - ($hours * 60 * 60);
     $hours = str_pad ($hours, 2, "0", STR_PAD_LEFT);
     $seconds = floor($seconds / 60);
     $seconds = str_pad ($seconds, 2, "0", STR_PAD_LEFT);
-    $с_time = $hours . ':' . $seconds;
-    return $с_time;
+    $c_time = $hours . ':' . $seconds;
+    return $c_time;
 }
 
 function edit($price) {
@@ -48,14 +48,17 @@ function debug_error($link) {
 
 }
 
-function show_form($template, $title, $categories, $errors) {
-    $page_content = include_template($template, ['categories' => $categories, 'errors' => $errors]);
+function render($template, $title, $data = []) {
+    global $categories;
+    $data['categories'] = $categories;
+
+    $page_content = include_template($template . '.php', $data);
     $layout_content = include_template('layout.php', [
         'content'    => $page_content,
         'categories' => $categories,
         'title'      => $title
     ]);
-    print($layout_content);
+    return $layout_content;
 }
 
 function db_get_prepare_stmt($link, $sql, $data = []) {
@@ -103,11 +106,11 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     return $stmt;
 }
 
-function getPostVal($name) {
+function get_post_val($name) {
     return filter_input(INPUT_POST, $name);
 }
 
-function validateCategory($id, $allowed_list) {
+function validate_category($id, $allowed_list) {
     if (!in_array($id, $allowed_list)) {
         return "Указана несуществующая категория";
     }
@@ -115,7 +118,7 @@ function validateCategory($id, $allowed_list) {
     return null;
 }
 
-function validateLength($value, $min, $max) {
+function validate_length($value, $min, $max) {
     if ($value) {
         $len = strlen($value);
         if ($len < $min or $len > $max) {
@@ -126,7 +129,7 @@ function validateLength($value, $min, $max) {
     return null;
 }
 
-function validateNumber($value) {
+function validate_number($value) {
     if (!is_numeric($value)){
         return 'Введите число';
     }
@@ -145,7 +148,7 @@ function validateDate(string $date){
     if (strtotime($date) < time()){
         return "Выберите будущую дату";
     }
-    
+
     return null;
 }
 
@@ -163,11 +166,11 @@ function user_exist_by_email($email, $link){
     return mysqli_num_rows($res) > 0;
 }
 
-function validateEmail($email, $link){
+function validate_email($email, $link){
     if(empty($email)){
         return 'Пустой email';
     }
-    
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return 'Введите корректный email';
     }
