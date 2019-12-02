@@ -11,6 +11,7 @@ $res = mysqli_query($link, $sql);
 
 if (!$res) {
     $error = debug_error($link);
+    die();
 }
 
 $lots = mysqli_fetch_assoc($res);
@@ -24,16 +25,12 @@ if (empty($lots)) {
 $page_content = include_template('lot.php', [
     'lots' => $lots,
     'categories' => $categories,
-    'error' => $error
 ]);
 
 $layout_content = include_template('layout.php', [
 	'content' => $page_content,
 	'categories' => $categories,
-	'title' => 'YetiCave - Главная страница',
-	'user_name' => $user_name,
-	'is_auth' => $is_auth,
-	'error' => $error
+	'title' => 'Название лота'
 ]);
 
 print($layout_content);

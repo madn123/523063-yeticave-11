@@ -1,6 +1,11 @@
 <?php
 require_once 'include.php';
 
+if (isset($_SESSION['user'])) {
+        header("Location: /");
+        exit();
+}
+
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
     $page_content = include_template('sign-up.php', ['categories' => $categories]);
     $layout_content = include_template('layout.php', [
@@ -35,7 +40,7 @@ if (!empty($errors)) {
     $layout_content = include_template('layout.php', [
         'content'    => $page_content,
         'categories' => $categories,
-        'title'      => 'Регистрация'
+        'title'      => 'Ошибка регистрации'
     ]);
     print($layout_content);
     die();    
@@ -56,21 +61,4 @@ if(!$res){
     die();
 }
 
-if ($res && empty($errors)) {
-    header("Location: /login.php");
-    exit();
-}
-
-$page_content = include_template('sign-up.php', [
-    'errors' => $errors,
-    'form' => $form, 
-    'categories' => $categories
-]);
-
-$layout_content = include_template('layout.php', [
-    'content'    => $page_content,
-    'categories' => $categories,
-    'title'      => 'Регистрация'
-]);
-
-print($layout_content);
+header("Location: /login.php");

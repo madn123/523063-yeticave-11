@@ -48,6 +48,16 @@ function debug_error($link) {
 
 }
 
+function show_form($template, $title, $categories, $errors) {
+    $page_content = include_template($template, ['categories' => $categories, 'errors' => $errors]);
+    $layout_content = include_template('layout.php', [
+        'content'    => $page_content,
+        'categories' => $categories,
+        'title'      => $title
+    ]);
+    print($layout_content);
+}
+
 function db_get_prepare_stmt($link, $sql, $data = []) {
     $stmt = mysqli_prepare($link, $sql);
 

@@ -1,20 +1,9 @@
-﻿<main class="container">
-	<section class="promo">
-	    <h2 class="promo__title">Нужен стафф для катки?</h2>
-	    <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
-	    <ul class="promo__list">
-	        <?php foreach ($categories as $category): ?>
-			    <li class="promo__item promo__item--<?=($category['category_code']); ?>">
-			        <a class="promo__link" href="all-lots.php"><?=$category['category_name']; ?></a>
-			    </li>
-			<?php endforeach ?>
-	    </ul>
-	</section>
-	<section class="lots">
-	    <div class="lots__header">
-	        <h2>Открытые лоты</h2>
-	    </div>
-	        <ul class="lots__list">
+﻿<?php require_once 'nav.php'; ?>
+
+<div class="container">
+      <section class="lots">
+        <h2>Все лоты в категории <span>«<?=$categories[$_GET['category']]['category_name'];?>»</span></h2>
+        <ul class="lots__list">
 	        	<?php foreach ($items as $item): ?>
 		            <li class="lots__item lot">
 		                <div class="lot__image">
@@ -40,5 +29,19 @@
 		            </li>
 		        <?php endforeach ?>
 	        </ul>
-	</section>
-</main>
+      </section>
+
+<?php if ($pages_count > 1): ?>
+	<ul class="pagination-list">
+		<li class="pagination-item pagination-item-prev"><a href="/all-lots.php?page=<?=($page-1);?>">Назад</a></li>
+		<?php foreach ($pages as $page): ?>
+			<li class="pagination-item <?php if ($page == $cur_page): ?>pagination-item-active<?php endif; ?>">
+				<a href="/all-lots.php?page=<?=$page;?>"><?=$page;?></a>
+			</li>
+		<?php endforeach; ?>
+		<li class="pagination-item pagination-item-next"><a href="/all-lots.php?page=<?=($page+1);?>">Вперед</a></li>
+	</ul>
+<?php endif; ?>
+
+  </div>
+  </main>

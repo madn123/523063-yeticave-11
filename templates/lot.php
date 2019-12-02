@@ -1,13 +1,5 @@
-﻿  <main>
-    <nav class="nav">
-      <ul class="nav__list container">
-        <?php foreach ($categories as $category): ?>
-              <li class="nav__item">
-                  <a href="pages/all-lots.html"><?=$category['category_name']; ?></a>
-              </li>
-        <?php endforeach ?>
-      </ul>
-    </nav>  
+﻿<?php require_once 'nav.php'; ?>
+
     <section class="lot-item container">
       <h2><?=($lots['name']); ?></h2>
 
@@ -23,7 +15,7 @@
         </div>
 
         <div class="lot-item__right">
-          <div class="lot-item__state">
+          <div class="lot-item__state" <?php if (!isset($_SESSION['user'])): ?> style="display:none" <?php endif ?>>
             <div class="lot-item__timer timer <?php if (conver_time($lots['completion_date']) < 1): ?> timer--finishing <?php endif ?>">
               <?=conver_time($lots['completion_date']);?>
             </div>
@@ -36,7 +28,6 @@
                 Мин. ставка <span>12 000 р</span>
               </div>
             </div>
-
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
               <p class="lot-item__form-item form__item form__item--invalid">
                 <label for="cost">Ваша ставка</label>

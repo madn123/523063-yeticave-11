@@ -978,6 +978,7 @@ input:invalid .form__error{
 .lot-item__state {
   padding: 30px;
   background-color: #ffffff;
+  margin-bottom: 35px;
 }
 
 .lot-item__timer {
@@ -1060,10 +1061,6 @@ input:invalid .form__error{
 }
 
 /* История ставок */
-
-.history {
-  margin-top: 34px;
-}
 
 .history h3 {
   margin: 0;

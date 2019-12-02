@@ -1,6 +1,11 @@
 <?php
 require_once 'include.php';
 
+if (!isset($_SESSION['user'])) {
+    http_response_code (403);
+    exit();
+}
+
 $cats_ids = [];
 $cats_ids = array_column($categories, 'id');
 
@@ -87,9 +92,8 @@ if( isset($_FILES['image']['name']) and !empty($_FILES['image']['name']) ){
     }
 }
 
-if (count($errors) > 0) {
+if (!empty($errors)) {
     $page_content = include_template('add-lot.php', [
-        'lots' => $lots, 
         'errors' => $errors, 
         'categories' => $categories
     ]);
@@ -102,7 +106,9 @@ if (count($errors) > 0) {
     die();
 }
 
-$sql = 'INSERT INTO items (date_creation, category_id, creator_user_id, name, description, image, completion_date, start_price, step_bet) VALUES (NOW(), ?, 1, ?, ?, ?, ?, ?, ?)';
+$user_id = $_SESSION['user']['id'];
+
+$sql = 'INSERT INTO items (date_creation, category_id, creator_user_id, name, description, image, completion_date, start_price, step_bet) VALUES (NOW(), ?,' . $user_id . ', ?, ?, ?, ?, ?, ?)';
 $stmt = db_get_prepare_stmt($link, $sql, [
     $lots['category_id'],
     $lots['name'], 

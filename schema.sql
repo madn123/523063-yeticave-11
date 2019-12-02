@@ -35,3 +35,5 @@ name CHAR NOT NULL,
 pass CHAR NOT NULL,
 contacts VARCHAR(128) NOT NULL
 );
+
+CREATE FULLTEXT INDEX items_ft_search ON items(name, description);
