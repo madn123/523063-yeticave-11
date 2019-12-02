@@ -38,9 +38,9 @@
       					<a href="login.php">Вход</a>
     				</li>
   				</ul>
-        	<?php endif ?>	
+        	<?php endif ?>
         </nav>
-        
+
     </div>
 </header>
 

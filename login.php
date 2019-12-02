@@ -19,12 +19,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 if(!empty($errors) or $_SERVER['REQUEST_METHOD'] != 'POST') {
-    show_form('login.php', 'Авторизация', $categories, $errors);
-    die();    
+    print render('login', 'Авторизация', ['errors' => $errors]);
+    die();
 }
 
 $email = mysqli_real_escape_string($link, $form['email']);
-$sql = "SELECT * FROM users WHERE email = '$email'";
+
+$sql = <<<SQL
+    SELECT * FROM users WHERE email = '$email'
+SQL;
+
 $res = mysqli_query($link, $sql);
 
 if(!$res){
@@ -47,8 +51,8 @@ if (empty($errors)) {
 }
 
 if (!empty($errors)) {
-    show_form('login.php', 'Ошика авторизации', $categories, $errors);
-    die();    
+    print render('login', 'Ошибка авторизации', ['errors' => $errors]);
+    die();
 }
 
 header("Location: /");

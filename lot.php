@@ -3,9 +3,11 @@ require_once 'include.php';
 
 $id = intval($_GET['id']);
 
-$sql = 'SELECT * FROM items i '
-    . 'JOIN categories c ON i.category_id = c.id '
-    . 'WHERE i.id =' . $id . '';
+$sql = <<<SQL
+    SELECT * FROM items i
+    JOIN categories c ON i.category_id = c.id
+    WHERE i.id = $id
+SQL;
 
 $res = mysqli_query($link, $sql);
 
@@ -22,17 +24,5 @@ if (empty($lots)) {
     die();
 }
 
-$page_content = include_template('lot.php', [
-    'lots' => $lots,
-    'categories' => $categories,
-]);
-
-$layout_content = include_template('layout.php', [
-	'content' => $page_content,
-	'categories' => $categories,
-	'title' => 'Название лота'
-]);
-
-print($layout_content);
-
-
+print render('lot', 'Название лота', ['lots' => $lots]);
+die();

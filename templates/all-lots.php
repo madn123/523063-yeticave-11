@@ -2,7 +2,7 @@
 
 <div class="container">
       <section class="lots">
-        <h2>Все лоты в категории <span>«<?=$categories[$_GET['category']]['category_name'];?>»</span></h2>
+        <h2>Все лоты в категории <span>«<?=$categories[$cur_cat]['category_name'];?>»</span></h2>
         <ul class="lots__list">
 	        	<?php foreach ($items as $item): ?>
 		            <li class="lots__item lot">
@@ -21,8 +21,8 @@
 		                            	<?=edit($item['start_price']);?>
 		                            </span>
 		                        </div>
-		                        <div class="lot__timer timer <?php if (conver_time($item['completion_date']) < 1): ?> timer--finishing <?php endif ?>">
-		                            <?=conver_time($item['completion_date']);?>
+		                        <div class="lot__timer timer <?php if (convert_time($item['completion_date']) < 1): ?> timer--finishing <?php endif ?>">
+		                            <?=convert_time($item['completion_date']);?>
 		                        </div>
 		                    </div>
 		                </div>
@@ -33,15 +33,20 @@
 
 <?php if ($pages_count > 1): ?>
 	<ul class="pagination-list">
-		<li class="pagination-item pagination-item-prev"><a href="/all-lots.php?page=<?=($page-1);?>">Назад</a></li>
+		<?php if ($cur_page > 1): ?>
+			<li class="pagination-item pagination-item-prev"><a href="/all-lots.php?page=<?=($cur_page - 1);?>&category=<?=$cur_cat;?>">Назад</a></li>
+		<?php endif ?>
 		<?php foreach ($pages as $page): ?>
 			<li class="pagination-item <?php if ($page == $cur_page): ?>pagination-item-active<?php endif; ?>">
-				<a href="/all-lots.php?page=<?=$page;?>"><?=$page;?></a>
+				<a href="/all-lots.php?page=<?=$page;?>&category=<?=$cur_cat;?>"><?=$page;?></a>
 			</li>
 		<?php endforeach; ?>
-		<li class="pagination-item pagination-item-next"><a href="/all-lots.php?page=<?=($page+1);?>">Вперед</a></li>
+		<?php if ($cur_page != $pages_count): ?>
+			<li class="pagination-item pagination-item-next"><a href="/all-lots.php?page=<?=($cur_page + 1);?>&category=<?=$cur_cat;?>">Вперед</a></li>
+		<?php endif ?>
 	</ul>
 <?php endif; ?>
 
   </div>
   </main>
+

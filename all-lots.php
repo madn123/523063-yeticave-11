@@ -1,11 +1,18 @@
 <?php
 require_once 'include.php';
 
-$cur_page = $_GET['page'] ?? 1;
-$category = $_GET['category'];
-$page_items = 3;
+$cur_page = intval($_GET['page'] ?? 1);
+$cur_cat = intval($_GET['category'] ?? null);
 
-$res = mysqli_query($link, "SELECT COUNT(*) as cnt FROM items");
+$page_items = 6;
+
+$sql = <<<SQL
+    SELECT COUNT(*) as cnt FROM items i
+	JOIN categories c ON i.category_id = c.id
+	WHERE c.id = $cur_cat
+SQL;
+
+$res = mysqli_query($link, $sql);
 
 if (!$res) {
     $error = debug_error($link);
@@ -18,10 +25,12 @@ $offset = ($cur_page - 1) * $page_items;
 
 $pages = range(1, $pages_count);
 
-$sql = 'SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i '
-	. 'JOIN categories c ON i.category_id = c.id '
-	. 'WHERE c.id =' . $category . ' '
-	. 'ORDER BY date_creation DESC LIMIT ' . $page_items . ' OFFSET ' . $offset;
+$sql = <<<SQL
+    SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i
+	JOIN categories c ON i.category_id = c.id
+	WHERE c.id = $cur_cat
+	ORDER BY date_creation DESC LIMIT $page_items OFFSET $offset
+SQL;
 
 $res = mysqli_query($link, $sql);
 
@@ -32,18 +41,12 @@ if (!$res) {
 
 $items = mysqli_query($link, $sql);
 
-$page_content = include_template('all-lots.php', [
-	'items' => $items,
+print render('all-lots', 'Лоты по категориям', [
+    'items' => $items,
     'pages' => $pages,
     'pages_count' => $pages_count,
     'cur_page' => $cur_page,
+    'cur_cat' => $cur_cat,
     'categories' => $categories
 ]);
-
-$layout_content = include_template('layout.php', [
-	'content' => $page_content,
-	'categories' => $categories,
-	'title' => 'YetiCave - Главная страница',
-]);
-
-print($layout_content);
+die();

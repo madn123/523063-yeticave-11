@@ -7,14 +7,8 @@ if (isset($_SESSION['user'])) {
 }
 
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
-    $page_content = include_template('sign-up.php', ['categories' => $categories]);
-    $layout_content = include_template('layout.php', [
-        'content'    => $page_content,
-        'categories' => $categories,
-        'title'      => 'Регистрация'
-    ]);
-    print($layout_content);
-    die();    
+    print render('sign-up', 'Регистрация');
+    die();
 }
 
 $form = $_POST;
@@ -27,32 +21,27 @@ foreach ($required as $field) {
     }
 }
 
-$error = validateEmail($form['email'], $link);
+$error = validate_email($form['email'], $link);
 if ($error != null) {
     $errors['email'] = $error;
 }
 
 if (!empty($errors)) {
-    $page_content = include_template('sign-up.php', [
-        'categories' => $categories,
-        'errors' => $errors
-    ]);
-    $layout_content = include_template('layout.php', [
-        'content'    => $page_content,
-        'categories' => $categories,
-        'title'      => 'Ошибка регистрации'
-    ]);
-    print($layout_content);
-    die();    
+    print render('sign-up', 'Ошибка регистрации', ['errors' => $errors]);
+    die();
 }
 
 $pass = password_hash($form['pass'], PASSWORD_DEFAULT);
 
-$sql = 'INSERT INTO users (dt_add, email, name, pass, contacts) VALUES (NOW(), ?, ?, ?, ?)';
+$sql = <<<SQL
+    INSERT INTO users (dt_add, email, name, pass, contacts)
+    VALUES (NOW(), ?, ?, ?, ?)
+SQL;
+
 $stmt = db_get_prepare_stmt($link, $sql, [
-    trim($form['email']), 
-    $form['name'], 
-    $pass, 
+    trim($form['email']),
+    $form['name'],
+    $pass,
     $form['contacts']]);
 $res = mysqli_stmt_execute($stmt);
 
