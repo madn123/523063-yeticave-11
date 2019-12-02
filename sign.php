@@ -7,7 +7,7 @@ if (isset($_SESSION['user'])) {
 }
 
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
-    print render('sign-up.php', 'Регистрация');
+    print render('sign-up', 'Регистрация');
     die();
 }
 
@@ -33,7 +33,11 @@ if (!empty($errors)) {
 
 $pass = password_hash($form['pass'], PASSWORD_DEFAULT);
 
-$sql = 'INSERT INTO users (dt_add, email, name, pass, contacts) VALUES (NOW(), ?, ?, ?, ?)';
+$sql = <<<SQL
+    INSERT INTO users (dt_add, email, name, pass, contacts)
+    VALUES (NOW(), ?, ?, ?, ?)
+SQL;
+
 $stmt = db_get_prepare_stmt($link, $sql, [
     trim($form['email']),
     $form['name'],

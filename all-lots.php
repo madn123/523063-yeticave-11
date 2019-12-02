@@ -6,9 +6,11 @@ $cur_cat = intval($_GET['category'] ?? null);
 
 $page_items = 6;
 
-$sql = 'SELECT COUNT(*) as cnt FROM items i '
-		. 'JOIN categories c ON i.category_id = c.id '
-		. 'WHERE c.id =' . $cur_cat . ' ';
+$sql = <<<SQL
+    SELECT COUNT(*) as cnt FROM items i
+	JOIN categories c ON i.category_id = c.id
+	WHERE c.id = $cur_cat
+SQL;
 
 $res = mysqli_query($link, $sql);
 
@@ -23,10 +25,12 @@ $offset = ($cur_page - 1) * $page_items;
 
 $pages = range(1, $pages_count);
 
-$sql = 'SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i '
-	. 'JOIN categories c ON i.category_id = c.id '
-	. 'WHERE c.id =' . $cur_cat . ' '
-	. 'ORDER BY date_creation DESC LIMIT ' . $page_items . ' OFFSET ' . $offset;
+$sql = <<<SQL
+    SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i
+	JOIN categories c ON i.category_id = c.id
+	WHERE c.id = $cur_cat
+	ORDER BY date_creation DESC LIMIT $page_items OFFSET $offset
+SQL;
 
 $res = mysqli_query($link, $sql);
 

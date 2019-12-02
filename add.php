@@ -28,7 +28,7 @@ $rules = [
         return validate_length($value, 10, 1000);
     },
     'completion_date' => function($value) {
-        return validateDate($value);
+        return validate_date($value);
     },
     'start_price' => function($value) {
         return validate_number($value);
@@ -94,7 +94,11 @@ if (!empty($errors)) {
 
 $user_id = $_SESSION['user']['id'];
 
-$sql = 'INSERT INTO items (date_creation, category_id, creator_user_id, name, description, image, completion_date, start_price, step_bet) VALUES (NOW(), ?,' . $user_id . ', ?, ?, ?, ?, ?, ?)';
+$sql = <<<SQL
+    INSERT INTO items (date_creation, category_id, creator_user_id, name, description, image, completion_date, start_price, step_bet)
+    VALUES (NOW(), ?,$user_id, ?, ?, ?, ?, ?, ?)
+SQL;
+
 $stmt = db_get_prepare_stmt($link, $sql, [
     $lots['category_id'],
     $lots['name'],

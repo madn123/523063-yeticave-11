@@ -8,9 +8,11 @@ if (empty($search)) {
     die();
 }
 
-$sql = 'SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i '
-    . 'JOIN categories c ON i.category_id = c.id '
-    . 'WHERE MATCH(name, description) AGAINST(?)';
+$sql = <<<SQL
+    SELECT i.id, name, start_price, image, completion_date, c.category_name FROM items i
+    JOIN categories c ON i.category_id = c.id
+    WHERE MATCH(name, description) AGAINST(?)
+SQL;
 
 $stmt = db_get_prepare_stmt($link, $sql, [$search]);
 mysqli_stmt_execute($stmt);

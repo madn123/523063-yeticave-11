@@ -50,4 +50,3 @@
   </div>
   </main>
 
-<?php print_r($categories); ?>

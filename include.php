@@ -7,7 +7,9 @@ if (!$link) {
     die();
 }
 
-$sql = 'SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC';
+$sql = <<<SQL
+    SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC
+SQL;
 
 $result = mysqli_query($link, $sql);
 
@@ -16,4 +18,7 @@ if (!$result) {
     die();
 }
 
-$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$categories = [];
+while($row = mysqli_fetch_array($result)){
+    $categories[ $row['id'] ] = $row;
+}

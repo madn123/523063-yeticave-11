@@ -141,7 +141,7 @@ function validate_number($value) {
     return null;
 }
 
-function validateDate(string $date){
+function validate_date(string $date){
     if (!is_date_valid($date)){
         return 'Неверный формат даты';
     }

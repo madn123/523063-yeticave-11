@@ -3,9 +3,11 @@ require_once 'include.php';
 
 $id = intval($_GET['id']);
 
-$sql = 'SELECT * FROM items i '
-    . 'JOIN categories c ON i.category_id = c.id '
-    . 'WHERE i.id =' . $id . '';
+$sql = <<<SQL
+    SELECT * FROM items i
+    JOIN categories c ON i.category_id = c.id
+    WHERE i.id = $id
+SQL;
 
 $res = mysqli_query($link, $sql);
 
