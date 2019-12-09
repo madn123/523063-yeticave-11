@@ -26,27 +26,32 @@
                             <span class="lot-item__cost"><?= edit($lots['start_price']); ?></span>
                         </div>
                         <div class="lot-item__min-cost">
-                            Мин. ставка <span>12 000 р</span>
+                            Мин. ставка <span><?=edit($new_price);?></span>
                         </div>
                     </div>
+
                     <form class="lot-item__form" action="add-bet.php" method="post" autocomplete="off">
-                        <p class="lot-item__form-item form__item "><!-- form__item--invalid -->
+                        <?php $classname = isset($error) ? "form__item--invalid " : ""; ?>
+                        <p class="lot-item__form-item form__item <?= $classname; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" placeholder="12 000">
-                            <span class="form__error">Введите наименование лота</span>
+                            <input type="hidden" name="item_id" value="<?= ($lots['id']); ?>">
+                            <input id="cost" type="text" name="cost" placeholder="<?=edit($new_price);?>">
+                            <span class="form__error"><?= $error; ?></span>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
 
                 <div class="history">
-                    <h3>История ставок (<span>10</span>)</h3>
+                    <h3>История ставок (<span><?=count($bets);?></span>)</h3>
                     <table class="history__list">
-                        <tr class="history__item">
-                            <td class="history__name">Иван</td>
-                            <td class="history__price">10 999 р</td>
-                            <td class="history__time">5 минут назад</td>
-                        </tr>
+                        <?php foreach ($bets as $bet): ?>
+                            <tr class="history__item">
+                                <td class="history__name"><?=$bet['name']; ?></td>
+                                <td class="history__price"><?=edit($bet['price']); ?></td>
+                                <td class="history__time"><?=format_date($bet['date_creation']); ?></td>
+                            </tr>
+                        <?php endforeach ?>
                     </table>
                 </div>
             </div>

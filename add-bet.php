@@ -1,29 +1,44 @@
 <?php
 require_once 'include.php';
 
-$cost = filter_input_array(INPUT_POST, ['cost' => FILTER_DEFAULT], true);
-$errors = [];
+$cost = filter_input(INPUT_POST, 'cost', FILTER_DEFAULT);
+$item_id = filter_input(INPUT_POST, 'item_id', FILTER_DEFAULT);
 
-$rule = ['cost' => function($value) {
-    return validate_number($value);
-    }
-];
+$error = validate_number($cost);
 
-if (!empty ($rule)) {
-    $errors['cost'] = $rule;
-    print render('lot', 'Ошибка!', ['errors' => $errors]);
+if (!empty($error)) {
+    $error = 'Заполните поле';
+    print render('lot', 'Ошибка!', ['error' => $error]);
     die();
 }
 
 $sql = <<<SQL
-    INSERT INTO items (start_price)
-    VALUES (?)
-    INSERT INTO bets (date_creation, price, user_id, item_id)
-    VALUES (NOW(), ?, 1, 1)
+    SELECT items.start_price, items.step_bet FROM items
+    WHERE items.id = $item_id
 SQL;
 
-$stmt = db_get_prepare_stmt($link, $sql, $cost);
+$res = mysqli_query($link, $sql);
 
+if (!$res) {
+    $error = debug_error($link);
+    die();
+}
+
+$new_price = mysqli_fetch_array($res, MYSQLI_ASSOC);
+$new_price = $new_price['start_price'] + $new_price['step_bet'];
+
+if ($new_price > $cost){
+    $error = 'Ваша ставка должна быть больше минимальной';
+    print render('lot', 'Ошибка!', ['error' => $error]);
+    die();
+}
+
+$sql = <<<SQL
+    INSERT INTO bets (date_creation, price, user_id, item_id)
+    VALUES (NOW(), ?, ?, ?)
+SQL;
+
+$stmt = db_get_prepare_stmt($link, $sql, [$cost, $_SESSION['user']['id'], $item_id]);
 $res = mysqli_stmt_execute($stmt);
 
 if(!$res){
@@ -31,6 +46,18 @@ if(!$res){
     die();
 }
 
-$lot_id = mysqli_insert_id($link);
-header("Location: lot.php?id=" . $lot_id);
+$sql = <<<SQL
+    UPDATE items SET start_price = $cost
+    WHERE id = $item_id
+SQL;
+
+//$stmt = db_get_prepare_stmt($link, $sql, $cost);
+//$res = mysqli_stmt_execute($stmt);
+//
+//if(!$res){
+//    debug_error($link);
+//    die();
+//}
+
+header("Location: lot.php?id=" . $item_id);
 die();

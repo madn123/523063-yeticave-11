@@ -180,3 +180,59 @@ function validate_email($email, $link){
     }
     return null;
 }
+
+function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+{
+    $number = (int) $number;
+    $mod10 = $number % 10;
+    $mod100 = $number % 100;
+
+    switch (true) {
+        case ($mod100 >= 11 && $mod100 <= 20):
+            return $many;
+
+        case ($mod10 > 5):
+            return $many;
+
+        case ($mod10 === 1):
+            return $one;
+
+        case ($mod10 >= 2 && $mod10 <= 4):
+            return $two;
+
+        default:
+            return $many;
+    }
+}
+
+function format_date ($date){
+    $new_date = strtotime($date);
+    $date_diff = time() - $new_date;
+
+    if ($date_diff < 60) {
+        return 'Только что';
+    }
+    elseif ($date_diff < 3600) {
+        $min = floor($date_diff / 60);
+        $new_date = $min . ' ' . get_noun_plural_form($min,
+                'минуту назад',
+                'минуты назад',
+                'минут назад'
+            );
+        return $new_date;
+    }
+    elseif ($date_diff < 86400) {
+        $hours = floor($date_diff / 60 / 60);
+        $new_date = $hours . ' ' . get_noun_plural_form($hours,
+                'час назад',
+                'часа назад',
+                'часов назад'
+            );
+        return $new_date;
+    }
+    else {
+        $date = date_create($date);
+        $new_date = date_format($date, 'd.m.y') . ' в ' . date_format($date, 'H:i');
+        return $new_date;
+    }
+}
