@@ -47,17 +47,17 @@ if(!$res){
 }
 
 $sql = <<<SQL
-    UPDATE items SET start_price = $cost
-    WHERE id = $item_id
+    UPDATE items SET start_price = ?
+    WHERE id = ?
 SQL;
 
-//$stmt = db_get_prepare_stmt($link, $sql, $cost);
-//$res = mysqli_stmt_execute($stmt);
-//
-//if(!$res){
-//    debug_error($link);
-//    die();
-//}
+$stmt = db_get_prepare_stmt($link, $sql, [$cost, $item_id]);
+$res = mysqli_stmt_execute($stmt);
+
+if(!$res){
+    debug_error($link);
+    die();
+}
 
 header("Location: lot.php?id=" . $item_id);
 die();
