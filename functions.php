@@ -35,6 +35,18 @@ function include_template($name, $data) {
     return $result;
 }
 
+function do_query($link, $sql, $params = array()){
+    $stmt = db_get_prepare_stmt($link, $sql, $params);
+    $res = mysqli_stmt_execute($stmt);
+
+    if (!$res) {
+        debug_error($link);
+        die();
+    }
+
+    return $res;
+}
+
 function link_error($link) {
     $error = mysqli_connect_error($link);
     $content = include_template('error.php', ['error' => $error]);
@@ -236,3 +248,4 @@ function format_date ($date){
         return $new_date;
     }
 }
+

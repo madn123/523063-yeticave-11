@@ -34,9 +34,11 @@
                         <?php $classname = isset($error) ? "form__item--invalid " : ""; ?>
                         <p class="lot-item__form-item form__item <?= $classname; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input type="hidden" name="item_id" value="<?= ($lots['id']); ?>">
+                            <input type="hidden" name="id" value="<?= ($lots['id']); ?>">
                             <input id="cost" type="text" name="cost" placeholder="<?=edit($new_price);?>">
-                            <span class="form__error"><?= $error; ?></span>
+                            <?php if (isset($error)): ?>
+                                <span class="form__error"><?= $error; ?></span>
+                            <?php endif; ?>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>

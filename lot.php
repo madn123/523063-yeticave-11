@@ -3,68 +3,36 @@ require_once 'include.php';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cost = filter_input(INPUT_POST, 'cost', FILTER_DEFAULT);
-    $item_id = filter_input(INPUT_POST, 'item_id', FILTER_DEFAULT);
+    $id = filter_input(INPUT_POST, 'id', FILTER_DEFAULT);
 
     $error = validate_number($cost);
 
-    if (!empty($error)) {
-        $error = 'Заполните поле';
-        print render('lot', 'Ошибка!', ['error' => $error]);
-        die();
+    if (empty($error)) {
+
+        $res = mysqli_query($link, "SELECT items.start_price, items.step_bet FROM items
+        WHERE items.id = $id");
+        if (!$res) {
+            $error = debug_error($link);
+            die();
+        }
+
+        $new_price = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        $new_price = $new_price['start_price'] + $new_price['step_bet'];
+
+        if ($new_price < $cost) {
+            do_query($link, "INSERT INTO bets (date_creation, price, user_id, item_id)
+            VALUES (NOW(), ?, ?, ?)", [$cost, $_SESSION['user']['id'], $id]);
+            do_query($link, "UPDATE items SET start_price = ?
+            WHERE id = ?", [$cost, $id]);
+
+            header("Location: lot.php?id=" . $id);
+            die();
+        }
+        $error = 'Ваша ставка должна быть выше минимальной';
     }
-
-    $sql = <<<SQL
-    SELECT items.start_price, items.step_bet FROM items
-    WHERE items.id = $item_id
-SQL;
-
-    $res = mysqli_query($link, $sql);
-
-    if (!$res) {
-        $error = debug_error($link);
-        die();
-    }
-
-    $new_price = mysqli_fetch_array($res, MYSQLI_ASSOC);
-    $new_price = $new_price['start_price'] + $new_price['step_bet'];
-
-    if ($new_price > $cost){
-        $error = 'Ваша ставка должна быть больше минимальной';
-        print render('lot', 'Ошибка!', ['error' => $error]);
-        die();
-    }
-
-    $sql = <<<SQL
-    INSERT INTO bets (date_creation, price, user_id, item_id)
-    VALUES (NOW(), ?, ?, ?)
-SQL;
-
-    $stmt = db_get_prepare_stmt($link, $sql, [$cost, $_SESSION['user']['id'], $item_id]);
-    $res = mysqli_stmt_execute($stmt);
-
-    if(!$res){
-        debug_error($link);
-        die();
-    }
-
-    $sql = <<<SQL
-    UPDATE items SET start_price = ?
-    WHERE id = ?
-SQL;
-
-    $stmt = db_get_prepare_stmt($link, $sql, [$cost, $item_id]);
-    $res = mysqli_stmt_execute($stmt);
-
-    if(!$res){
-        debug_error($link);
-        die();
-    }
-
-    header("Location: lot.php?id=" . $item_id);
-    die();
 }
 
-$id = intval($_GET['id']);
+$id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
 $sql = <<<SQL
     SELECT items.* FROM items
@@ -108,5 +76,6 @@ $bets = mysqli_fetch_all($res, MYSQLI_ASSOC);
 print render('lot', $lots['name'], [
     'lots' => $lots,
     'bets' => $bets,
-    'new_price' => $new_price
+    'new_price' => $new_price,
+    'error' => $error
 ]);
