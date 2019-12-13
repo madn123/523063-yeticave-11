@@ -1,4 +1,4 @@
-﻿<main>
+<main>
     <?php require_once 'nav.php'; ?>
 
     <div class="container">

@@ -1,4 +1,4 @@
-﻿<main>
+<main>
     <?php require_once 'nav.php'; ?>
 
     <form class="form form--add-lot container form--invalid" action="add.php" method="post"

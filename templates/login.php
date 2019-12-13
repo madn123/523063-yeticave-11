@@ -1,4 +1,4 @@
-﻿<main>
+<main>
     <?php require_once 'nav.php'; ?>
 
     <form class="form container form--invalid" action="login.php" method="post">

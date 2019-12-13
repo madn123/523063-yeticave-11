@@ -1,4 +1,4 @@
-﻿<main>
+<main>
     <?php require_once 'nav.php'; ?>
 
     <section class="lot-item container">
@@ -31,7 +31,7 @@
                     </div>
 
                     <form class="lot-item__form" action="lot.php" method="post" autocomplete="off">
-                        <?php $classname = isset($error) ? "form__item--invalid " : ""; ?>
+                        <?php $classname = isset($error) ? "form__item--invalid" : ""; ?>
                         <p class="lot-item__form-item form__item <?= $classname; ?>">
                             <label for="cost">Ваша ставка</label>
                             <input type="hidden" name="id" value="<?= ($lots['id']); ?>">
