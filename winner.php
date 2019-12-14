@@ -13,6 +13,9 @@ SQL;
 
 $res = mysqli_query($link, $sql);
 $lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
+if (empty($lots)){
+    return ;
+}
 
 foreach ($lots as $lot){
     $sql = <<<SQL

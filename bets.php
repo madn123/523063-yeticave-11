@@ -17,14 +17,32 @@ $sql = <<<SQL
     ORDER BY date_creation DESC
 SQL;
 
-$res = mysqli_query($link, $sql);
-
-if (!$res) {
-    $error = debug_error($link);
-    die();
-}
+$res = do_query($link, $sql);
 
 $items = mysqli_fetch_all($res, MYSQLI_ASSOC);
+
+array_walk($items, function (&$item){
+    if($item['winner_user_id'] == $_SESSION['user']['id']){
+        $item['bet_classname'] = 'rates__item--win';
+        $item['timer_classname'] = 'timer--win';
+        $item['timer'] = 'Ставка выиграла';
+        return $item;
+    }
+    if (convert_time($item['completion_date']) < 0){
+        $item['bet_classname'] = 'rates__item--end';
+        $item['timer_classname'] = 'timer--end';
+        $item['timer'] = 'Торги окончены';
+        return $item;
+    }
+    if ((strtotime($item['completion_date']) - time()) < 3600){
+        $item['timer_classname'] = 'timer--finishing';
+        $item['timer'] = convert_time($item['completion_date']);
+        return $item;
+    }
+    $item['bet_classname'] = '';
+    $item['timer_classname'] = '';
+    $item['timer'] = convert_time($item['completion_date']);
+});
 
 print render('bets', 'Мои ставки', ['items' => $items]);
 die();

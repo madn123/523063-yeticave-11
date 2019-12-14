@@ -29,12 +29,7 @@ $sql = <<<SQL
     SELECT * FROM users WHERE email = '$email'
 SQL;
 
-$res = mysqli_query($link, $sql);
-
-if(!$res){
-    debug_error($link);
-    die();
-}
+$res = do_query($link, $sql);
 
 $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 if (!$user){

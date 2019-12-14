@@ -36,8 +36,13 @@ function include_template($name, $data) {
 }
 
 function do_query($link, $sql, $params = array()){
-    $stmt = db_get_prepare_stmt($link, $sql, $params);
-    $res = mysqli_stmt_execute($stmt);
+    if (!empty($params)){
+        $stmt = db_get_prepare_stmt($link, $sql, $params);
+        $res = mysqli_stmt_execute($stmt);
+    }
+    else{
+        $res = mysqli_query($link, $sql);
+    }
 
     if (!$res) {
         debug_error($link);
@@ -248,4 +253,3 @@ function format_date ($date){
         return $new_date;
     }
 }
-

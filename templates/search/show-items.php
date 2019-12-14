@@ -16,8 +16,8 @@
                     <?=edit($item['start_price']);?>
                   </span>
                     </div>
-                    <div class="lot__timer timer <?php if (convert_time($item['completion_date']) < 1): ?> timer--finishing <?php endif ?>">
-                        <?=convert_time($item['completion_date']);?>
+                    <div class="lot__timer timer <?=$item['timer_classname']; ?>">
+                        <?=$item['timer']; ?>
                     </div>
                 </div>
             </div>

@@ -8,18 +8,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $error = validate_number($cost);
 
     if (empty($error)) {
-
-        $res = mysqli_query($link, "SELECT items.start_price, items.step_bet FROM items
+        $res = do_query($link, "SELECT items.start_price, items.step_bet FROM items
         WHERE items.id = $id");
-        if (!$res) {
-            $error = debug_error($link);
-            die();
-        }
 
         $new_price = mysqli_fetch_array($res, MYSQLI_ASSOC);
         $new_price = $new_price['start_price'] + $new_price['step_bet'];
 
-        if ($new_price < $cost) {
+        if ($new_price <= $cost) {
             do_query($link, "INSERT INTO bets (date_creation, price, user_id, item_id)
             VALUES (NOW(), ?, ?, ?)", [$cost, $_SESSION['user']['id'], $id]);
             do_query($link, "UPDATE items SET start_price = ?
@@ -35,47 +30,51 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
 $sql = <<<SQL
-    SELECT items.* FROM items
+    SELECT items.*, categories.category_name FROM items
     LEFT JOIN categories ON items.category_id = categories.id
     WHERE items.id = $id
 SQL;
 
-$res = mysqli_query($link, $sql);
+$res = do_query($link, $sql);
 
-if (!$res) {
-    $error = debug_error($link);
-    die();
-}
+$lot = mysqli_fetch_assoc($res);
 
-$lots = mysqli_fetch_assoc($res);
-
-if (empty($lots)) {
+if (empty($lot)) {
     $content = include_template('404.php',[]);
     print($content);
     die();
 }
 
-$new_price = $lots['start_price'] + $lots['step_bet'];
+$new_price = $lot['start_price'] + $lot['step_bet'];
 
 $sql = <<<SQL
-    SELECT bets.price, bets.date_creation, users.name FROM bets
+    SELECT bets.*, users.name FROM bets
     JOIN users ON bets.user_id = users.id
     WHERE bets.item_id = $id
     ORDER BY date_creation DESC
 SQL;
 
-$res = mysqli_query($link, $sql);
-
-if (!$res) {
-    $error = debug_error($link);
-    die();
-}
+$res = do_query($link, $sql);
 
 $bets = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-print render('lot', $lots['name'], [
-    'lots' => $lots,
+if(!isset($_SESSION['user'])){
+    $display_lot = 'style="display:none"';
+}
+elseif (($_SESSION['user']['id']) == ($lot['creator_user_id'])){
+    $display_lot = 'style="display:none"';
+}
+elseif (($_SESSION['user']['id']) == ($bets['0']['user_id'])){
+    $display_lot = 'style="display:none"';
+}
+elseif (convert_time($lot['completion_date']) < 0){
+    $display_lot = 'style="display:none"';
+}
+
+print render('lot', $lot['name'], [
+    'lot' => $lot,
     'bets' => $bets,
     'new_price' => $new_price,
+    'display_lot' => $display_lot,
     'error' => $error
 ]);

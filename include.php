@@ -11,14 +11,9 @@ $sql = <<<SQL
     SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC
 SQL;
 
-$result = mysqli_query($link, $sql);
-
-if (!$result) {
-    $error = debug_error($link);
-    die();
-}
+$res = do_query($link, $sql);
 
 $categories = [];
-while($row = mysqli_fetch_array($result)){
+while($row = mysqli_fetch_array($res)){
     $categories[ $row['id'] ] = $row;
 }
