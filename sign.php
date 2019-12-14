@@ -33,21 +33,10 @@ if (!empty($errors)) {
 
 $pass = password_hash($form['pass'], PASSWORD_DEFAULT);
 
-$sql = <<<SQL
-    INSERT INTO users (dt_add, email, name, pass, contacts)
-    VALUES (NOW(), ?, ?, ?, ?)
-SQL;
-
-$stmt = db_get_prepare_stmt($link, $sql, [
+do_query($link, "INSERT INTO users (dt_add, email, name, pass, contacts) VALUES (NOW(), ?, ?, ?, ?)", [
     trim($form['email']),
     $form['name'],
     $pass,
     $form['contacts']]);
-$res = mysqli_stmt_execute($stmt);
-
-if(!$res){
-    debug_error($link);
-    die();
-}
 
 header("Location: /login.php");

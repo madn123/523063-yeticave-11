@@ -1,39 +1,35 @@
 <?php
 require_once 'include.php';
 
-$search = filter_input(INPUT_GET, 'search', FILTER_DEFAULT);
-
-if (empty($search)) {
-    print render('search/search', 'Ошибка!', ['errors' => $errors]);
-    die();
+if (!isset($_SESSION['user'])) {
+    header("Location: /");
+    exit();
 }
+
+$cur_user = $_SESSION['user']['id'];
 
 $sql = <<<SQL
-    SELECT i.*, c.category_name FROM items i
+    SELECT b.id, b.date_creation, b.price, i.id, i.name, i.image, i.completion_date, i.winner_user_id, c.category_name, u.contacts FROM bets b
+    JOIN items i ON b.item_id = i.id
     JOIN categories c ON i.category_id = c.id
-    WHERE MATCH(name, description) AGAINST(?)
-    ORDER BY date_creation DESC LIMIT 9
+    JOIN users u ON b.user_id = u.id
+    WHERE b.user_id = $cur_user
+    ORDER BY date_creation DESC
 SQL;
 
-$res = do_query($link, $sql, [$search]);
-$stmt = db_get_prepare_stmt($link, $sql, [$search]);
-mysqli_stmt_execute($stmt);
-$res = mysqli_stmt_get_result($stmt);
-
-if (!$res) {
-    $error = debug_error($link);
-    die();
-}
+$res = do_query($link, $sql);
 
 $items = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 array_walk($items, function (&$item){
     if($item['winner_user_id'] == $_SESSION['user']['id']){
+        $item['bet_classname'] = 'rates__item--win';
         $item['timer_classname'] = 'timer--win';
         $item['timer'] = 'Ставка выиграла';
         return $item;
     }
     if (convert_time($item['completion_date']) < 0){
+        $item['bet_classname'] = 'rates__item--end';
         $item['timer_classname'] = 'timer--end';
         $item['timer'] = 'Торги окончены';
         return $item;
@@ -43,12 +39,10 @@ array_walk($items, function (&$item){
         $item['timer'] = convert_time($item['completion_date']);
         return $item;
     }
+    $item['bet_classname'] = '';
     $item['timer_classname'] = '';
     $item['timer'] = convert_time($item['completion_date']);
 });
 
-print render('search/search', 'Поиск лота', [
-    'items' => $items,
-    'search' => $search
-]);
+print render('bets', 'Мои ставки', ['items' => $items]);
 die();

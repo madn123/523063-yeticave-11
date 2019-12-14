@@ -99,7 +99,7 @@ $sql = <<<SQL
     VALUES (NOW(), ?,$user_id, ?, ?, ?, ?, ?, ?)
 SQL;
 
-$stmt = db_get_prepare_stmt($link, $sql, [
+do_query($link, $sql, [
     $lots['category_id'],
     $lots['name'],
     $lots['description'],
@@ -108,13 +108,6 @@ $stmt = db_get_prepare_stmt($link, $sql, [
     $lots['start_price'],
     $lots['step_bet']
 ]);
-
-$res = mysqli_stmt_execute($stmt);
-
-if(!$res){
-    debug_error($link);
-    die();
-}
 
 $lot_id = mysqli_insert_id($link);
 header("Location: lot.php?id=" . $lot_id);
