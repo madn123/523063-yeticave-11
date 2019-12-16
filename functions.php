@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Конвертируем дату в формат ЧЧ:ММ
+ * @param string $c_time Начальное значение даты в виде строки
+ * @return string Отформатированная дата
+ */
 function convert_time($c_time)
 {
     $diff = strtotime($c_time) - time();
@@ -12,6 +17,11 @@ function convert_time($c_time)
     return $c_time;
 }
 
+/**
+ * Форматируем цену: Добавляем разделитель для тысяч и знак рубля
+ * @param integer $price Начальное значение цены В виде целого числа
+ * @return string Отформатированная цена в виде строки
+ */
 function edit($price)
 {
     $price = ceil($price);
@@ -20,6 +30,12 @@ function edit($price)
     return $price;
 }
 
+/**
+ * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
+ * @param string $name Путь к файлу шаблона относительно папки templates
+ * @param array $data Ассоциативный массив с данными для шаблона
+ * @return string Итоговый HTML
+ */
 function include_template($name, $data)
 {
     $name = 'templates/' . $name;
@@ -38,6 +54,46 @@ function include_template($name, $data)
     return $result;
 }
 
+/**
+ * Передаем данные в шаблон для подключения.
+ * @param string $template Название шаблона в види строки
+ * @param string $title Название страницы в виде строки
+ * @param array $data Массив с данными для вывода в шаблоне
+ * @return string $layout_content Возвращает шаблоны с внесенными данными.
+ */
+function render($template, $title, $data = [])
+{
+    global $categories;
+    $data['categories'] = $categories;
+
+    $page_content = include_template($template . '.php', $data);
+    $layout_content = include_template('layout.php', [
+        'content' => $page_content,
+        'categories' => $categories,
+        'title' => $title
+    ]);
+    return $layout_content;
+}
+
+/**
+ * Возвращает строку с описанием последней ошибки при обращении к БД. Подключаем шаблон для вывода ошибки.
+ * @param mysqli $link Идентификатор соединения
+ */
+function debug_error($link)
+{
+    $error = mysqli_error($link);
+    $content = include_template('error.php', ['error' => $error]);
+    print($content);
+}
+
+/**
+ * Делаем запрос к базе данных, если параметр $params пустой. В случае неудачи - возвращаем ошибку.
+ * В ином случае, выполняем подготовленный запрос.
+ * @param mysqli $link Идентификатор соединения
+ * @param string $sql Данные для запроса
+ * @param array $params Массив с данными для подготовленного запроса
+ * @return string $res Возвращает объект mysqli_result.
+ */
 function do_query($link, $sql, $params = array())
 {
     if (!empty($params)) {
@@ -55,6 +111,10 @@ function do_query($link, $sql, $params = array())
     return $res;
 }
 
+/**
+ * Возвращаем описание последней ошибки подключения. Выводим ее в шаблоне.
+ * @param mysqli $link Идентификатор соединения
+ */
 function link_error($link)
 {
     $error = mysqli_connect_error($link);
@@ -62,28 +122,13 @@ function link_error($link)
     print($content);
 }
 
-function debug_error($link)
-{
-    $error = mysqli_error($link);
-    $content = include_template('error.php', ['error' => $error]);
-    print($content);
-
-}
-
-function render($template, $title, $data = [])
-{
-    global $categories;
-    $data['categories'] = $categories;
-
-    $page_content = include_template($template . '.php', $data);
-    $layout_content = include_template('layout.php', [
-        'content' => $page_content,
-        'categories' => $categories,
-        'title' => $title
-    ]);
-    return $layout_content;
-}
-
+/**
+ * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
+ * @param mysqli $link Идентификатор соединения
+ * @param string $sql SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ * @return mysqli_stmt Подготовленное выражение
+ */
 function db_get_prepare_stmt($link, $sql, $data = [])
 {
     $stmt = mysqli_prepare($link, $sql);
@@ -132,11 +177,21 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     return $stmt;
 }
 
+/**
+ * Фильтруем переменную
+ * @param string $name Переменная в виде строки
+ * @return string Отфильтрованнные данные
+ */
 function get_post_val($name)
 {
     return filter_input(INPUT_POST, $name);
 }
 
+/**
+ * Проверяет валидность категории.
+ * @param integer $id id категории
+ * @return string Возвращает ошибку валидности либо пустоту, если категория корректна.
+ */
 function validate_category($id, $allowed_list)
 {
     if (!in_array($id, $allowed_list)) {
@@ -146,6 +201,13 @@ function validate_category($id, $allowed_list)
     return null;
 }
 
+/**
+ * Проверяет длину значения.
+ * @param string $value Значение для проверки
+ * @param integer $min Значение минимального колиества символов
+ * @param integer $max Значение Максимального колиества символов
+ * @return string Возвращает ошибку длины значения, либо пустоту, если значение корректно.
+ */
 function validate_length($value, $min, $max)
 {
     if ($value) {
@@ -158,6 +220,11 @@ function validate_length($value, $min, $max)
     return null;
 }
 
+/**
+ * Проверяет является ли значение целым числом
+ * @param integer $value Значение для проверки
+ * @return string Возвращает ошибку если хначение не числовое, либо дробное. В ином случаем - возвращает пустоту
+ */
 function validate_number($value)
 {
     if (!is_numeric($value)) {
@@ -171,6 +238,24 @@ function validate_number($value)
     return null;
 }
 
+/**
+ * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
+ * @param string $date Дата в виде строки
+ * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
+ */
+function is_date_valid(string $date): bool
+{
+    $format_to_check = 'Y-m-d';
+    $dateTimeObj = date_create_from_format($format_to_check, $date);
+
+    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+}
+
+/**
+ * Выводит ошибки, если переданная дата не соответствует формату 'ГГГГ-ММ-ДД', либо является прошедшей датой.
+ * @param string $date Дата в виде строки
+ * @return string Возвращает ошибку если валидация не прошла. В ином случаем - возвращает пустоту
+ */
 function validate_date(string $date)
 {
     if (!is_date_valid($date)) {
@@ -183,14 +268,12 @@ function validate_date(string $date)
     return null;
 }
 
-function is_date_valid(string $date): bool
-{
-    $format_to_check = 'Y-m-d';
-    $dateTimeObj = date_create_from_format($format_to_check, $date);
-
-    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
-}
-
+/**
+ * Проверяет есть ли переданный email в БД
+ * @param string $email email в виде строки
+ * @param mysqli $link Идентификатор соединения
+ * @return bool true в зависимости от наличия email в БД
+ */
 function user_exist_by_email($email, $link)
 {
     $email = mysqli_real_escape_string($link, $email);
@@ -199,6 +282,12 @@ function user_exist_by_email($email, $link)
     return mysqli_num_rows($res) > 0;
 }
 
+/**
+ * Выводит ошибки по валидации email. Проверяет на пустоту, корректность, наличие в БД.
+ * @param string $email email в виде строки
+ * @param mysqli $link Идентификатор соединения
+ * @return string Возвращает ошибку если валидация не прошла. В ином случаем - возвращает пустоту
+ */
 function validate_email($email, $link)
 {
     if (empty($email)) {
@@ -215,6 +304,15 @@ function validate_email($email, $link)
     return null;
 }
 
+/**
+ * Возвращает корректную форму множественного числа
+ * Ограничения: только для целых чисел
+ * @param int $number Число, по которому вычисляем форму множественного числа
+ * @param string $one Форма единственного числа: яблоко, час, минута
+ * @param string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
+ * @param string $many Форма множественного числа для остальных чисел
+ * @return string Рассчитанная форма множественнго числа
+ */
 function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
     $number = (int)$number;
@@ -239,6 +337,11 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
     }
 }
 
+/**
+ * Форматирует переданную дату в определенный вид, зависящий от прошедшего времени.
+ * @param string $date Дата в виде строки
+ * @return string $date Возвращает дату в новом формате
+ */
 function format_date($date)
 {
     $new_date = strtotime($date);
@@ -267,4 +370,37 @@ function format_date($date)
         $new_date = date_format($date, 'd.m.y') . ' в ' . date_format($date, 'H:i');
         return $new_date;
     }
+}
+
+/**
+ * Принимает массив с данными о лоте и назначает css свойства, в зависимости от оработанных параметров.
+ * @param array $items Массив с данными.
+ * @return array Возвращает массив с определенными классами.
+ */
+function assign_class(&$items)
+{
+    array_walk($items, function (&$item) {
+        if ((!empty($_SESSION['user'])) and $item['winner_user_id'] == $_SESSION['user']['id']) {
+            $item['bet_classname'] = 'rates__item--win';
+            $item['timer_classname'] = 'timer--win';
+            $item['timer'] = 'Ставка выиграла';
+            return $item;
+        }
+        if (convert_time($item['completion_date']) < 0) {
+            $item['bet_classname'] = 'rates__item--end';
+            $item['timer_classname'] = 'timer--end';
+            $item['timer'] = 'Торги окончены';
+            return $item;
+        }
+        if ((strtotime($item['completion_date']) - time()) < 3600) {
+            $item['timer_classname'] = 'timer--finishing';
+            $item['timer'] = convert_time($item['completion_date']);
+            return $item;
+        }
+        $item['bet_classname'] = '';
+        $item['timer_classname'] = '';
+        $item['timer'] = convert_time($item['completion_date']);
+        return $item;
+    });
+    return $items;
 }

@@ -1,10 +1,9 @@
 <?php
 require_once 'include.php';
 
-$transport = new Swift_SmtpTransport("phpdemo.ru", 25);
-$transport->setUsername("keks@phpdemo.ru");
-$transport->setPassword("htmlacademy");
-
+$transport = new Swift_SmtpTransport("ssl://smtp.yandex.ru", 465);
+$transport->setusername("testest.mail@yandex.ru");
+$transport->setPassword("qaz123");
 $mailer = new Swift_Mailer($transport);
 
 $date = date('Y-m-d H:i:s');
@@ -37,8 +36,8 @@ SQL;
 
     $message = new Swift_Message();
     $message->setSubject("Ваша ставка победила");
-    $message->setFrom(['keks@phpdemo.ru' => 'YetiCave']);
-    $message->setBcc($user['email']);
+    $message->setFrom(['testest.mail@yandex.ru' => 'YetiCave']);
+    $message->setto($user['email']);
 
     $msg_content = include_template('email.php', [
         'lot' => $lot,
@@ -47,12 +46,6 @@ SQL;
     $message->setBody($msg_content, 'text/html');
 
     $result = $mailer->send($message);
-
-    if ($result) {
-        print("Рассылка успешно отправлена");
-    } else {
-        print("Не удалось отправить рассылку");
-    }
 }
 
 

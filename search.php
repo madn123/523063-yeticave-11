@@ -2,17 +2,36 @@
 require_once 'include.php';
 
 $search = filter_input(INPUT_GET, 'search', FILTER_DEFAULT);
+$cur_page = intval($_GET['page'] ?? 1);
 
 if (empty($search)) {
     print render('search/search', 'Ошибка!', ['errors' => $errors]);
     die();
 }
 
+$page_items = 9;
+
+$sql = <<<SQL
+    SELECT COUNT(*) as cnt FROM items i
+	WHERE MATCH(name, description) AGAINST (?)
+SQL;
+
+$res = do_query($link, $sql, [$search]);
+$stmt = db_get_prepare_stmt($link, $sql, [$search]);
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+
+
+$items_count = mysqli_fetch_assoc($res)['cnt'];
+$pages_count = ceil($items_count / $page_items);
+$offset = ($cur_page - 1) * $page_items;
+$pages = range(1, $pages_count);
+
 $sql = <<<SQL
     SELECT i.*, c.category_name FROM items i
     JOIN categories c ON i.category_id = c.id
-    WHERE MATCH(name, description) AGAINST(?)
-    ORDER BY date_creation DESC LIMIT 9
+    WHERE MATCH (name, description) AGAINST (?)
+    ORDER BY date_creation DESC LIMIT $page_items OFFSET $offset
 SQL;
 
 $res = do_query($link, $sql, [$search]);
@@ -27,28 +46,15 @@ if (!$res) {
 
 $items = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-array_walk($items, function (&$item) {
-    if ($item['winner_user_id'] == $_SESSION['user']['id']) {
-        $item['timer_classname'] = 'timer--win';
-        $item['timer'] = 'Ставка выиграла';
-        return $item;
-    }
-    if (convert_time($item['completion_date']) < 0) {
-        $item['timer_classname'] = 'timer--end';
-        $item['timer'] = 'Торги окончены';
-        return $item;
-    }
-    if ((strtotime($item['completion_date']) - time()) < 3600) {
-        $item['timer_classname'] = 'timer--finishing';
-        $item['timer'] = convert_time($item['completion_date']);
-        return $item;
-    }
-    $item['timer_classname'] = '';
-    $item['timer'] = convert_time($item['completion_date']);
-});
+assign_class($items);
 
 print render('search/search', 'Поиск лота', [
     'items' => $items,
-    'search' => $search
+    'search' => $search,
+    'pages' => $pages,
+    'pages_count' => $pages_count,
+    'cur_page' => $cur_page,
+    'cur_cat' => $cur_cat,
+    'categories' => $categories
 ]);
 die();
