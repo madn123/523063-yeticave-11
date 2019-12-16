@@ -41,5 +41,3 @@ JOIN items i
 ON item_id = i.id
 WHERE i.id = 1
 ORDER BY i.date_creation ASC; -- получить список ставок для лота по его идентификатору с сортировкой по дате.
-
-CREATE UNIQUE INDEX emailkey ON users(email);
