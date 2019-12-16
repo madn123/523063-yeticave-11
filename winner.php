@@ -1,25 +1,30 @@
 <?php
 require_once 'include.php';
-// 1. Найти все лоты без победителей, дата истечения которых меньше или равна текущей дате.
-// 2. Для каждого такого лота найти последнюю ставку.
-// 3. Записать в лот победителем автора последней ставки.
+
+$transport = new Swift_SmtpTransport("phpdemo.ru", 25);
+$transport->setUsername("keks@phpdemo.ru");
+$transport->setPassword("htmlacademy");
+
+$mailer = new Swift_Mailer($transport);
 
 $date = date('Y-m-d H:i:s');
 
 $sql = <<<SQL
-    SELECT items.id, completion_date FROM items
+    SELECT items.id, items.completion_date, items.name FROM items
     WHERE winner_user_id IS NULL AND completion_date <= '$date'
 SQL;
 
 $res = mysqli_query($link, $sql);
 $lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
-if (empty($lots)){
-    return ;
+
+if (empty($lots)) {
+    return;
 }
 
-foreach ($lots as $lot){
+foreach ($lots as $lot) {
     $sql = <<<SQL
-        SELECT bets.user_id FROM bets
+        SELECT bets.user_id, users.name, users.email FROM bets
+        LEFT JOIN users ON bets.user_id = users.id
         WHERE bets.item_id = {$lot['id']}
         ORDER BY bets.date_creation DESC LIMIT 1
 SQL;
@@ -29,6 +34,27 @@ SQL;
 
     $sql = "UPDATE items SET winner_user_id = {$user['user_id']} WHERE id = {$lot['id']}";
     do_query($link, $sql);
+
+    $message = new Swift_Message();
+    $message->setSubject("Ваша ставка победила");
+    $message->setFrom(['keks@phpdemo.ru' => 'YetiCave']);
+    $message->setBcc($user['email']);
+
+    $msg_content = include_template('email.php', [
+        'lot' => $lot,
+        'user' => $user
+    ]);
+    $message->setBody($msg_content, 'text/html');
+
+    $result = $mailer->send($message);
+
+    if ($result) {
+        print("Рассылка успешно отправлена");
+    } else {
+        print("Не удалось отправить рассылку");
+    }
 }
+
+
 
 

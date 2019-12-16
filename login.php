@@ -2,11 +2,11 @@
 require_once 'include.php';
 
 if (isset($_SESSION['user'])) {
-        header("Location: /");
-        exit();
+    header("Location: /");
+    exit();
 }
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
     $required = ['email', 'pass'];
     $errors = [];
@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-if(!empty($errors) or $_SERVER['REQUEST_METHOD'] != 'POST') {
+if (!empty($errors) or $_SERVER['REQUEST_METHOD'] != 'POST') {
     print render('login', 'Авторизация', ['errors' => $errors]);
     die();
 }
@@ -32,17 +32,16 @@ SQL;
 $res = do_query($link, $sql);
 
 $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
-if (!$user){
-	$errors['email'] = 'Не верный логин или пароль';
+if (!$user) {
+    $errors['email'] = 'Не верный логин или пароль';
 }
 
 if (empty($errors)) {
-	if (password_verify($form['pass'], $user['pass'])) {
-		$_SESSION['user'] = $user;
-	}
-	else {
-		$errors['pass'] = 'Не верный логин или пароль';
-	}
+    if (password_verify($form['pass'], $user['pass'])) {
+        $_SESSION['user'] = $user;
+    } else {
+        $errors['pass'] = 'Не верный логин или пароль';
+    }
 }
 
 if (!empty($errors)) {

@@ -1,7 +1,7 @@
 <?php
 require_once 'include.php';
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cost = filter_input(INPUT_POST, 'cost', FILTER_DEFAULT);
     $id = filter_input(INPUT_POST, 'id', FILTER_DEFAULT);
 
@@ -40,7 +40,7 @@ $res = do_query($link, $sql);
 $lot = mysqli_fetch_assoc($res);
 
 if (empty($lot)) {
-    $content = include_template('404.php',[]);
+    $content = include_template('404.php', []);
     print($content);
     die();
 }
@@ -58,16 +58,13 @@ $res = do_query($link, $sql);
 
 $bets = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-if(!isset($_SESSION['user'])){
+if (!isset($_SESSION['user'])) {
     $display_lot = 'style="display:none"';
-}
-elseif (($_SESSION['user']['id']) == ($lot['creator_user_id'])){
+} elseif (($_SESSION['user']['id']) == ($lot['creator_user_id'])) {
     $display_lot = 'style="display:none"';
-}
-elseif (($_SESSION['user']['id']) == ($bets['0']['user_id'])){
+} elseif (($_SESSION['user']['id']) == ($bets['0']['user_id'])) {
     $display_lot = 'style="display:none"';
-}
-elseif (convert_time($lot['completion_date']) < 0){
+} elseif (convert_time($lot['completion_date']) < 0) {
     $display_lot = 'style="display:none"';
 }
 

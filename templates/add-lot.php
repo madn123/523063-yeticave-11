@@ -8,7 +8,8 @@
             <?php $classname = isset($errors['name']) ? "form__item--invalid " : ""; ?>
             <div class="form__item <?= $classname; ?>">
                 <label for="lot-name">Наименование <sup>*</sup></label>
-                <input type="text" name="name" placeholder="Введите наименование лота" value="<?= get_post_val('name'); ?>">
+                <input type="text" name="name" placeholder="Введите наименование лота"
+                       value="<?= get_post_val('name'); ?>">
                 <span class="form__error">Введите наименование лота</span>
             </div>
 

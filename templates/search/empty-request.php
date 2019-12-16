@@ -1,5 +1,5 @@
-<?php if (isset($error) and empty($error)):?>
-    <?=$error?>
-<?php else:?>
+<?php if (isset($error) and empty($error)): ?>
+    <?= $error ?>
+<?php else: ?>
     <p>"Ничего не найдено"</p>
-<?php endif;?>
+<?php endif; ?>

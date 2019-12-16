@@ -31,13 +31,13 @@ $res = do_query($link, $sql);
 
 $items = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-array_walk($items, function (&$item){
-    if (convert_time($item['completion_date']) < 0){
+array_walk($items, function (&$item) {
+    if (convert_time($item['completion_date']) < 0) {
         $item['timer_classname'] = 'timer--end';
         $item['timer'] = 'Торги окончены';
         return $item;
     }
-    if ((strtotime($item['completion_date']) - time()) < 3600){
+    if ((strtotime($item['completion_date']) - time()) < 3600) {
         $item['timer_classname'] = 'timer--finishing';
         $item['timer'] = convert_time($item['completion_date']);
         return $item;

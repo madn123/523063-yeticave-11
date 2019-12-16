@@ -1,0 +1,14 @@
+{
+    "name": "kirill/523063-yeticave-11",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Kirill",
+            "email": "madn123@yandex.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

@@ -2,14 +2,14 @@
 require_once 'include.php';
 
 if (!isset($_SESSION['user'])) {
-    http_response_code (403);
+    http_response_code(403);
     exit();
 }
 
 $cats_ids = [];
 $cats_ids = array_column($categories, 'id');
 
-if($_SERVER['REQUEST_METHOD'] != 'POST') {
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     print render('add-lot', 'Добавление лота');
     die();
 }
@@ -18,22 +18,22 @@ $required = ['category_id', 'name', 'description', 'completion_date', 'start_pri
 $errors = [];
 
 $rules = [
-    'category_id' => function($value) use ($cats_ids) {
+    'category_id' => function ($value) use ($cats_ids) {
         return validate_category($value, $cats_ids);
     },
-    'name' => function($value) {
+    'name' => function ($value) {
         return validate_length($value, 5, 128);
     },
-    'description' => function($value) {
+    'description' => function ($value) {
         return validate_length($value, 10, 1000);
     },
-    'completion_date' => function($value) {
+    'completion_date' => function ($value) {
         return validate_date($value);
     },
-    'start_price' => function($value) {
+    'start_price' => function ($value) {
         return validate_number($value);
     },
-    'step_bet' => function($value) {
+    'step_bet' => function ($value) {
         return validate_number($value);
     }
 ];
@@ -61,7 +61,7 @@ foreach ($lots as $key => $value) {
 $errors = array_filter($errors);
 
 $errors['image'] = 'Вы не загрузили файл';
-if( isset($_FILES['image']['name']) and !empty($_FILES['image']['name']) ){
+if (isset($_FILES['image']['name']) and !empty($_FILES['image']['name'])) {
     unset($errors['image']);
     $tmp_name = $_FILES['image']['tmp_name'];
     $path = $_FILES['image']['name'];
@@ -69,7 +69,7 @@ if( isset($_FILES['image']['name']) and !empty($_FILES['image']['name']) ){
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $file_type = finfo_file($finfo, $tmp_name);
 
-    if($file_type == 'image/jpeg' or $file_type == 'image/png'){
+    if ($file_type == 'image/jpeg' or $file_type == 'image/png') {
         switch ($file_type) {
             case 'image/jpeg':
                 $filename .= '.jpeg';
@@ -81,8 +81,7 @@ if( isset($_FILES['image']['name']) and !empty($_FILES['image']['name']) ){
         }
         move_uploaded_file($tmp_name, __DIR__ . '/uploads/' . $filename);
         $lots['path'] = $filename;
-    }
-    else {
+    } else {
         $errors['image'] = 'Не верный тип изображения';
     }
 }

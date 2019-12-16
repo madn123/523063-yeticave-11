@@ -2,11 +2,11 @@
 require_once 'include.php';
 
 if (isset($_SESSION['user'])) {
-        header("Location: /");
-        exit();
+    header("Location: /");
+    exit();
 }
 
-if($_SERVER['REQUEST_METHOD'] != 'POST') {
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     print render('sign-up', 'Регистрация');
     die();
 }
@@ -37,6 +37,7 @@ do_query($link, "INSERT INTO users (dt_add, email, name, pass, contacts) VALUES 
     trim($form['email']),
     $form['name'],
     $pass,
-    $form['contacts']]);
+    $form['contacts']
+]);
 
 header("Location: /login.php");
