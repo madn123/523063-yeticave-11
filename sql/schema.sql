@@ -59,3 +59,16 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 );
+
+INSERT INTO categories
+SET category_name = 'Доски и лыжи', category_code = 'boards';
+INSERT INTO categories
+SET category_name = 'Крепления', category_code = 'attachment';
+INSERT INTO categories
+SET category_name = 'Ботинки', category_code = 'boots';
+INSERT INTO categories
+SET category_name = 'Одежда', category_code = 'clothing';
+INSERT INTO categories
+SET category_name = 'Инструменты', category_code = 'tools';
+INSERT INTO categories
+SET category_name = 'Разное', category_code = 'other';
