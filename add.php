@@ -1,5 +1,5 @@
 <?php
-require_once 'include.php';
+require_once 'include/include.php';
 
 if (!is_auth()) {
     http_response_code(403);

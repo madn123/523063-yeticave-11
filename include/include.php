@@ -1,6 +1,6 @@
 <?php
-require_once 'functions.php';
-require_once 'config.php';
+require_once 'include/functions.php';
+require_once 'include/config.php';
 require_once "vendor/autoload.php";
 
 if (!$link) {

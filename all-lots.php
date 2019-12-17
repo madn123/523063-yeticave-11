@@ -1,5 +1,5 @@
 <?php
-require_once 'include.php';
+require_once 'include/include.php';
 
 $cur_page = intval($_GET['page'] ?? 1);
 $cur_cat = intval($_GET['category'] ?? null);

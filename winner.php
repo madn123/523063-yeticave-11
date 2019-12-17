@@ -1,5 +1,4 @@
 <?php
-require_once 'include.php';
 
 $transport = new Swift_SmtpTransport("ssl://smtp.yandex.ru", 465);
 $transport->setusername("testest.mail@yandex.ru");

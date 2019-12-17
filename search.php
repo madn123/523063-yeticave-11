@@ -1,5 +1,5 @@
 <?php
-require_once 'include.php';
+require_once 'include/include.php';
 
 $search = filter_input(INPUT_GET, 'search', FILTER_DEFAULT);
 $cur_page = intval($_GET['page'] ?? 1);

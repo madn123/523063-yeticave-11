@@ -1,5 +1,5 @@
 <?php
-require_once 'include.php';
+require_once 'include/include.php';
 
 if (is_auth()) {
     header("Location: /");
@@ -50,4 +50,3 @@ if (!empty($errors)) {
 }
 
 header("Location: /");
-exit();

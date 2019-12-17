@@ -1,5 +1,5 @@
 <?php
-require_once 'include.php';
+require_once 'include/include.php';
 require_once 'winner.php';
 
 $sql = <<<SQL
@@ -16,4 +16,3 @@ $items = mysqli_fetch_all($res, MYSQLI_ASSOC);
 assign_class($items);
 
 print render('main', 'YetiCave - Главная страница', ['items' => $items]);
-die();
