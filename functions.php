@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Конвертируем дату в формат ЧЧ:ММ
+ * Конвертирует дату в формат ЧЧ:ММ
  * @param string $c_time Начальное значение даты в виде строки
  * @return string Отформатированная дата
  */
@@ -18,11 +18,11 @@ function convert_time($c_time)
 }
 
 /**
- * Форматируем цену: Добавляем разделитель для тысяч и знак рубля
+ * Форматирует цену: Добавляет разделитель для тысяч и знак рубля
  * @param integer $price Начальное значение цены В виде целого числа
  * @return string Отформатированная цена в виде строки
  */
-function edit($price)
+function edit_price($price)
 {
     $price = ceil($price);
     $price = number_format($price, 0, '', ' ');
@@ -55,7 +55,7 @@ function include_template($name, $data)
 }
 
 /**
- * Передаем данные в шаблон для подключения.
+ * Передает данные в шаблон для подключения.
  * @param string $template Название шаблона в види строки
  * @param string $title Название страницы в виде строки
  * @param array $data Массив с данными для вывода в шаблоне
@@ -76,7 +76,18 @@ function render($template, $title, $data = [])
 }
 
 /**
- * Возвращает строку с описанием последней ошибки при обращении к БД. Подключаем шаблон для вывода ошибки.
+ * Проводит очистку пользовательских данных перед их выводом
+ * @param string $html Пользовательские данные из шаблона
+ * @return string Возвращает отформатированные пользовательские данные.
+ */
+function html_encode($html){
+    $html = strip_tags($html);
+    $html = htmlspecialchars($html);
+    return $html;
+}
+
+/**
+ * Возвращает данные с описанием последней ошибки при обращении к БД. Подключаем шаблон для вывода ошибки.
  * @param mysqli $link Идентификатор соединения
  */
 function debug_error($link)
@@ -112,7 +123,7 @@ function do_query($link, $sql, $params = array())
 }
 
 /**
- * Возвращаем описание последней ошибки подключения. Выводим ее в шаблоне.
+ * Возвращает описание последней ошибки подключения. Выводит ее в шаблоне.
  * @param mysqli $link Идентификатор соединения
  */
 function link_error($link)
@@ -176,9 +187,39 @@ function db_get_prepare_stmt($link, $sql, $data = [])
 
     return $stmt;
 }
+/**
+ * Получает имя юзера из глобального массива $_SESSION.
+ * @return string Возвращает имя юзера в виде строки, либо null
+ */
+function get_user_name(){
+    if (isset($_SESSION['user']['name']) and !empty($_SESSION['user']['name'])){
+        return $_SESSION['user']['name'];
+    }
+    return null;
+}
 
 /**
- * Фильтруем переменную
+ * Получает id юзера из глобального массива $_SESSION.
+ * @return integer Возвращает числовое значение id, либо null
+ */
+function get_user_id(){
+   if (isset($_SESSION['user']['id']) and !empty($_SESSION['user']['id']) and (int) ($_SESSION['user']['id']) > 0){
+       return (int) ($_SESSION['user']['id']);
+   }
+   return null;
+}
+
+/**
+ * Проверяет авторизован ли пользователь.
+ * @return bool Возвращает булевое значение
+ */
+function is_auth(){
+    $user_id = get_user_id();
+    return $user_id > 0;
+}
+
+/**
+ * Фильтрует переменную
  * @param string $name Переменная в виде строки
  * @return string Отфильтрованнные данные
  */

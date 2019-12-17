@@ -16,11 +16,9 @@ $sql = <<<SQL
 	WHERE MATCH(name, description) AGAINST (?)
 SQL;
 
-$res = do_query($link, $sql, [$search]);
 $stmt = db_get_prepare_stmt($link, $sql, [$search]);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
-
 
 $items_count = mysqli_fetch_assoc($res)['cnt'];
 $pages_count = ceil($items_count / $page_items);
@@ -34,7 +32,6 @@ $sql = <<<SQL
     ORDER BY date_creation DESC LIMIT $page_items OFFSET $offset
 SQL;
 
-$res = do_query($link, $sql, [$search]);
 $stmt = db_get_prepare_stmt($link, $sql, [$search]);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
@@ -57,4 +54,3 @@ print render('search/search', 'Поиск лота', [
     'cur_cat' => $cur_cat,
     'categories' => $categories
 ]);
-die();

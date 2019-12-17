@@ -1,4 +1,4 @@
-﻿<main>
+<main>
     <?php require_once 'templates/nav.php'; ?>
 
     <div class="container">

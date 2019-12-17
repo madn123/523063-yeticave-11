@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?= $title; ?></title>
+    <title><?= html_encode($title); ?></title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/flatpickr.min.css" rel="stylesheet">
@@ -21,9 +21,9 @@
             </form>
             <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
             <nav class="user-menu">
-                <?php if (isset($_SESSION['user'])): ?>
+                <?php if (is_auth()): ?>
                     <div class="user-menu__logged">
-                        <p><? echo($_SESSION['user']['name']); ?></p>
+                        <p><? print(html_encode(get_user_name())); ?></p>
                         <a class="user-menu__bets" href="bets.php">Мои ставки</a>
                         <a class="user-menu__logout" href="logout.php">Выход</a>
                     </div>

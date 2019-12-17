@@ -1,7 +1,7 @@
 <?php
 require_once 'include.php';
 
-if (isset($_SESSION['user'])) {
+if (is_auth()) {
     header("Location: /");
     exit();
 }

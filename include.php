@@ -8,8 +8,6 @@ if (!$link) {
     die();
 }
 
-define('ON_PAGE_ITEMS', 6);
-
 $sql = <<<SQL
     SELECT id, category_name, category_code FROM categories ORDER BY category_name ASC
 SQL;
@@ -17,6 +15,7 @@ SQL;
 $res = do_query($link, $sql);
 
 $categories = [];
+
 while ($row = mysqli_fetch_array($res)) {
     $categories[$row['id']] = $row;
 }

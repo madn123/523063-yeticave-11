@@ -40,4 +40,3 @@ print render('all-lots', 'Лоты по категориям', [
     'cur_cat' => $cur_cat,
     'categories' => $categories
 ]);
-die();

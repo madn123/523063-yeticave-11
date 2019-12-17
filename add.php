@@ -1,7 +1,7 @@
 <?php
 require_once 'include.php';
 
-if (!isset($_SESSION['user'])) {
+if (!is_auth()) {
     http_response_code(403);
     exit();
 }
@@ -91,7 +91,7 @@ if (!empty($errors)) {
     die();
 }
 
-$user_id = $_SESSION['user']['id'];
+$user_id = get_user_id();
 
 $sql = <<<SQL
     INSERT INTO items (date_creation, category_id, creator_user_id, name, description, image, completion_date, start_price, step_bet)
@@ -110,4 +110,3 @@ do_query($link, $sql, [
 
 $lot_id = mysqli_insert_id($link);
 header("Location: lot.php?id=" . $lot_id);
-die();

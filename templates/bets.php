@@ -10,10 +10,10 @@
                             <img src="<?= $item['image']; ?>" width="54" height="40" alt="Изображение лота">
                         </div>
                         <div>
-                            <h3 class="rates__title"><a href="lot.php?id=<?= $item['id']; ?>"><?= $item['name']; ?></a>
+                            <h3 class="rates__title"><a href="lot.php?id=<?= $item['id']; ?>"><?= html_encode($item['name']); ?></a>
                             </h3>
-                            <?php if ($item['winner_user_id'] == $_SESSION['user']['id']): ?>
-                                <p><?= $item['contacts']; ?></p>
+                            <?php if ($item['winner_user_id'] == get_user_id()): ?>
+                                <p><?= html_encode($item['contacts']); ?></p>
                             <?php endif ?>
                         </div>
                     </td>
@@ -24,7 +24,7 @@
                         <div class="timer <?= $item['timer_classname']; ?>"><?= $item['timer']; ?></div>
                     </td>
                     <td class="rates__price">
-                        <?= edit($item['price']); ?>
+                        <?= edit_price($item['price']); ?>
                     </td>
                     <td class="rates__time">
                         <?= format_date($item['date_creation']); ?>
