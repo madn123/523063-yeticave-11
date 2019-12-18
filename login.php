@@ -8,12 +8,12 @@ if (is_auth()) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
-    $required = ['email', 'pass'];
+    $required = ['email' => '"E-mail"', 'pass' => '"Пароль"'];
     $errors = [];
 
-    foreach ($required as $field) {
+    foreach ($required as $field => $field_name) {
         if (empty($form[$field])) {
-            $errors[$field] = "Не заполнено поле " . $field;
+            $errors[$field] = "Не заполнено поле " . $field_name;
         }
     }
 }

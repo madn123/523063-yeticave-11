@@ -12,12 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 }
 
 $form = $_POST;
-$required = ['email', 'name', 'pass', 'contacts'];
+$required = [
+    'email' => '"E-mail"',
+    'name' => '"Имя"',
+    'pass' => '"Пароль"',
+    'contacts' => '"Контактные данные"'];
 $errors = [];
 
-foreach ($required as $field) {
+foreach ($required as $field => $field_name) {
     if (empty($form[$field])) {
-        $errors[$field] = "Не заполнено поле " . $field;
+        $errors[$field] = "Не заполнено поле " . $field_name;
     }
 }
 

@@ -332,15 +332,15 @@ function user_exist_by_email($email, $link)
 function validate_email($email, $link)
 {
     if (empty($email)) {
-        return 'Пустой email';
+        return 'Не заполнено поле "E-mail"';
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return 'Введите корректный email';
+        return 'Введите корректный E-mail';
     }
 
     if (user_exist_by_email($email, $link)) {
-        return 'Такой email уже есть';
+        return 'Такой E-mail уже есть';
     }
     return null;
 }

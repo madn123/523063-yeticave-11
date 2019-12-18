@@ -48,6 +48,13 @@ $lots = filter_input_array(INPUT_POST, [
     'step_bet' => FILTER_DEFAULT
 ], true);
 
+$translate = [
+    'name' => '"Название лота"',
+    'description' => '"Описание лота"',
+    'completion_date' => '"Дата завершения торгов"',
+    'start_price' => '"Стартовая цена"',
+    'step_bet' => '"Шаг ставки"'
+];
 foreach ($lots as $key => $value) {
     if (isset($rules[$key])) {
         $rule = $rules[$key];
@@ -55,7 +62,7 @@ foreach ($lots as $key => $value) {
     }
 
     if (in_array($key, $required) && empty($value)) {
-        $errors[$key] = "Поле $key надо заполнить";
+        $errors[$key] = "Поле {$translate[$key]} надо заполнить";
     }
 }
 
