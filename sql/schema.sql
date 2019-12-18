@@ -30,10 +30,7 @@ CREATE TABLE `items` (
   KEY `category_id` (`category_id`),
   KEY `creator_user_id` (`creator_user_id`),
   KEY `items_ibfk_3` (`winner_user_id`),
-  FULLTEXT KEY `items_ft_search` (`name`,`description`),
-  CONSTRAINT `items_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
-  CONSTRAINT `items_ibfk_2` FOREIGN KEY (`creator_user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `items_ibfk_3` FOREIGN KEY (`winner_user_id`) REFERENCES `users` (`id`)
+  FULLTEXT KEY `items_ft_search` (`name`,`description`)
 );
 
 CREATE TABLE `bets` (
@@ -44,9 +41,7 @@ CREATE TABLE `bets` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `bets_ibfk_1` (`item_id`),
-  KEY `bets_ibfk_2` (`user_id`),
-  CONSTRAINT `bets_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
-  CONSTRAINT `bets_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  KEY `bets_ibfk_2` (`user_id`)
 );
 
 CREATE TABLE `users` (
