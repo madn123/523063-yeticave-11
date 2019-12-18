@@ -8,7 +8,7 @@
         <div class="form__item <?= $classname; ?>">
             <label for="email">E-mail <sup>*</sup></label>
             <input id="email" type="text" name="email" placeholder="Введите e-mail"
-                   value="<?= get_post_val('email'); ?>">
+                   value="<?= html_encode(get_post_val('email')); ?>">
             <span class="form__error">Введите e-mail</span>
         </div>
 
@@ -16,14 +16,14 @@
         <div class="form__item <?= $classname; ?>">
             <label for="password">Пароль <sup>*</sup></label>
             <input id="password" type="password" name="pass" placeholder="Введите пароль"
-                   value="<?= get_post_val('pass'); ?>">
+                   value="<?= html_encode(get_post_val('pass')); ?>">
             <span class="form__error">Введите пароль</span>
         </div>
 
         <?php $classname = isset($errors['name']) ? "form__item--invalid " : ""; ?>
         <div class="form__item <?= $classname; ?>">
             <label for="name">Имя <sup>*</sup></label>
-            <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= get_post_val('name'); ?>">
+            <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= html_encode(get_post_val('name')); ?>">
             <span class="form__error">Введите имя</span>
         </div>
 
@@ -31,7 +31,7 @@
         <div class="form__item <?= $classname; ?>">
             <label for="message">Контактные данные <sup>*</sup></label>
             <textarea id="message" name="contacts"
-                      placeholder="Напишите как с вами связаться"><?= get_post_val('contacts'); ?></textarea>
+                      placeholder="Напишите как с вами связаться"><?= html_encode(get_post_val('contacts')); ?></textarea>
             <span class="form__error">Напишите как с вами связаться</span>
         </div>
 

@@ -9,7 +9,7 @@
             <div class="form__item <?= $classname; ?>">
                 <label for="lot-name">Наименование <sup>*</sup></label>
                 <input type="text" name="name" placeholder="Введите наименование лота"
-                       value="<?= get_post_val('name'); ?>">
+                       value="<?= html_encode(get_post_val('name')); ?>">
                 <span class="form__error">Введите наименование лота</span>
             </div>
 
@@ -31,7 +31,7 @@
         <div class="form__item form__item--wide <?= $classname; ?>">
             <label for="message">Описание <sup>*</sup></label>
             <textarea id="message" name="description"
-                      placeholder="Напишите описание лота"><?= get_post_val('description'); ?></textarea>
+                      placeholder="Напишите описание лота"><?= html_encode(get_post_val('description')); ?></textarea>
             <span class="form__error">Напишите описание лота</span>
         </div>
 
@@ -50,7 +50,7 @@
             <div class="form__item form__item--small <?= $classname; ?>">
                 <label for="lot-rate">Начальная цена <sup>*</sup></label>
                 <input id="lot-rate" type="text" name="start_price" placeholder="0"
-                       value="<?= get_post_val('start_price'); ?>">
+                       value="<?= html_encode(get_post_val('start_price')); ?>">
                 <span class="form__error">Введите начальную цену</span>
             </div>
 
@@ -58,7 +58,7 @@
             <div class="form__item form__item--small <?= $classname; ?>">
                 <label for="lot-step">Шаг ставки <sup>*</sup></label>
                 <input id="lot-step" type="text" name="step_bet" placeholder="0"
-                       value="<?= get_post_val('step_bet'); ?>">
+                       value="<?= html_encode(get_post_val('step_bet')); ?>">
                 <span class="form__error">Введите шаг ставки</span>
             </div>
 
@@ -66,7 +66,7 @@
             <div class="form__item <?= $classname; ?>">
                 <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
                 <input class="form__input-date" id="lot-date" type="text" name="completion_date"
-                       placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= get_post_val('completion_date'); ?>">
+                       placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= html_encode(get_post_val('completion_date')); ?>">
                 <span class="form__error">Введите дату завершения торгов</span>
             </div>
         </div>

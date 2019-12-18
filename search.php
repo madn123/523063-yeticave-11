@@ -1,7 +1,7 @@
 <?php
 require_once 'include/include.php';
 
-$search = filter_input(INPUT_GET, 'search', FILTER_DEFAULT);
+$search = html_encode(filter_input(INPUT_GET, 'search', FILTER_DEFAULT));
 $cur_page = intval($_GET['page'] ?? 1);
 
 if (empty($search)) {

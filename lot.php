@@ -40,8 +40,7 @@ $res = do_query($link, $sql);
 $lot = mysqli_fetch_assoc($res);
 
 if (empty($lot)) {
-    $content = include_template('404.php', []);
-    print($content);
+    print render('404', 'Страница не найдена');
     die();
 }
 

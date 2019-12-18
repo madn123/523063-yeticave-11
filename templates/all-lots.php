@@ -3,8 +3,11 @@
 
     <div class="container">
         <section class="lots">
-            <h2>Все лоты в категории <span>«<?= $categories[$cur_cat]['category_name']; ?>»</span></h2>
+            <h2>Все лоты в категории <span>«<?= html_encode($categories[$cur_cat]['category_name']); ?>»</span></h2>
             <ul class="lots__list">
+                <?php if (empty($items)): ?>
+                    <p>В данной категории нет лотов</p>
+                <?php endif; ?>
                 <?php foreach ($items as $item): ?>
                     <li class="lots__item lot">
                         <div class="lot__image">

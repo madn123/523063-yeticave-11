@@ -3,6 +3,7 @@ require_once 'include/include.php';
 
 if (!is_auth()) {
     http_response_code(403);
+    print render('error', 'Ошибка доступа', ['error' => 'Добавлять лот могут только зарегистрированнные пользователи']);
     exit();
 }
 

@@ -1,3 +1,4 @@
+<section class="lot-item container">
 <main class="content">
     <div class="content__main-col">
         <header class="content__header">
@@ -6,3 +7,4 @@
         </header>
     </div>
 </main>
+</section>

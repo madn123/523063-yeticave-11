@@ -4,20 +4,20 @@
     <form class="form container form--invalid" action="login.php" method="post">
         <h2>Вход</h2>
 
-        <?php $classname = isset($errors['email']) ? "form__item--invalid " : ""; ?>
+        <?php $classname = isset($errors) ? "form__item--invalid " : ""; ?>
         <div class="form__item <?= $classname; ?>">
             <label for="email">E-mail <sup>*</sup></label>
             <input id="email" type="text" name="email" placeholder="Введите e-mail"
-                   value="<?= get_post_val('email'); ?>">
-            <span class="form__error">Введите e-mail</span>
+                   value="<?= html_encode(get_post_val('email')); ?>">
+            <span class="form__error"><?= $errors['email']; ?></span>
         </div>
 
-        <?php $classname = isset($errors['pass']) ? "form__item--invalid " : ""; ?>
+        <?php $classname = isset($errors) ? "form__item--invalid " : ""; ?>
         <div class="form__item form__item--last <?= $classname; ?>">
             <label for="password">Пароль <sup>*</sup></label>
             <input id="password" type="password" name="pass" placeholder="Введите пароль"
-                   value="<?= get_post_val('pass'); ?>">
-            <span class="form__error">Введите пароль</span>
+                   value="<?= html_encode(get_post_val('pass')); ?>">
+            <span class="form__error"><?= $errors['pass']; ?></span>
         </div>
 
         <?php if (isset($errors)): ?>

@@ -231,7 +231,7 @@ function get_post_val($name)
 /**
  * Проверяет валидность категории.
  * @param integer $id id категории
- * @return string Возвращает ошибку валидности либо пустоту, если категория корректна.
+ * @return string Возвращает ошибку валидности, либо пустоту, если категория корректна.
  */
 function validate_category($id, $allowed_list)
 {
