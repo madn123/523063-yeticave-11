@@ -16,7 +16,8 @@ $required = [
     'email' => '"E-mail"',
     'name' => '"Имя"',
     'pass' => '"Пароль"',
-    'contacts' => '"Контактные данные"'];
+    'contacts' => '"Контактные данные"'
+];
 $errors = [];
 
 foreach ($required as $field => $field_name) {
@@ -25,10 +26,13 @@ foreach ($required as $field => $field_name) {
     }
 }
 
-$errors['email'] = validate_email($form['email'], $link);
-$errors['name'] = validate_length($form['name'], 3, 32);
-$errors['contacts'] = validate_length($form['contacts'], 3, 128);
-$errors = array_filter($errors);
+if (empty($errors)) {
+    $errors['email'] = validate_email($form['email'], $link);
+    $errors['name'] = validate_length($form['name'], 3, 32);
+    $errors['pass'] = validate_length($form['pass'], 3, 32);
+    $errors['contacts'] = validate_length($form['contacts'], 3, 128);
+    $errors = array_filter($errors);
+}
 
 if (!empty($errors)) {
     print render('sign-up', 'Ошибка регистрации', ['errors' => $errors]);

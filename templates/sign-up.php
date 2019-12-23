@@ -17,13 +17,14 @@
             <label for="password">Пароль <sup>*</sup></label>
             <input id="password" type="password" name="pass" placeholder="Введите пароль"
                    value="<?= html_encode(get_post_val('pass')); ?>">
-            <span class="form__error">Введите пароль</span>
+            <span class="form__error"><?= $errors['pass']; ?></span>
         </div>
 
         <?php $classname = isset($errors['name']) ? "form__item--invalid " : ""; ?>
         <div class="form__item <?= $classname; ?>">
             <label for="name">Имя <sup>*</sup></label>
-            <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= html_encode(get_post_val('name')); ?>">
+            <input id="name" type="text" name="name" placeholder="Введите имя"
+                   value="<?= html_encode(get_post_val('name')); ?>">
             <span class="form__error"><?= $errors['name']; ?></span>
         </div>
 

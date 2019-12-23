@@ -77,7 +77,7 @@ if (isset($_FILES['image']['name']) and !empty($_FILES['image']['name'])) {
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $file_type = finfo_file($finfo, $tmp_name);
 
-    if ($file_type == 'image/jpeg' or $file_type == 'image/png') {
+    if ($file_type === 'image/jpeg' or $file_type === 'image/png') {
         switch ($file_type) {
             case 'image/jpeg':
                 $filename .= '.jpeg';

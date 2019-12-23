@@ -59,9 +59,9 @@ $bets = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 if (!isset($_SESSION['user'])) {
     $display_lot = 'style="display:none"';
-} elseif (($_SESSION['user']['id']) == ($lot['creator_user_id'])) {
+} elseif (($_SESSION['user']['id']) === ($lot['creator_user_id'])) {
     $display_lot = 'style="display:none"';
-} elseif (($_SESSION['user']['id']) == ($bets['0']['user_id'])) {
+} elseif (($_SESSION['user']['id']) === ($bets['0']['user_id'])) {
     $display_lot = 'style="display:none"';
 } elseif (convert_time($lot['completion_date']) < 0) {
     $display_lot = 'style="display:none"';

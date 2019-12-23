@@ -80,7 +80,8 @@ function render($template, $title, $data = [])
  * @param string $html Пользовательские данные из шаблона
  * @return string Возвращает отформатированные пользовательские данные.
  */
-function html_encode($html){
+function html_encode($html)
+{
     $html = strip_tags($html);
     $html = htmlspecialchars($html);
     return $html;
@@ -143,19 +144,15 @@ function link_error($link)
 function db_get_prepare_stmt($link, $sql, $data = [])
 {
     $stmt = mysqli_prepare($link, $sql);
-
     if ($stmt === false) {
         $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
         die($errorMsg);
     }
-
     if ($data) {
         $types = '';
         $stmt_data = [];
-
         foreach ($data as $value) {
             $type = 's';
-
             if (is_int($value)) {
                 $type = 'i';
             } else {
@@ -167,32 +164,29 @@ function db_get_prepare_stmt($link, $sql, $data = [])
                     }
                 }
             }
-
             if ($type) {
                 $types .= $type;
                 $stmt_data[] = $value;
             }
         }
-
         $values = array_merge([$stmt, $types], $stmt_data);
-
         $func = 'mysqli_stmt_bind_param';
         $func(...$values);
-
         if (mysqli_errno($link) > 0) {
             $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
             die($errorMsg);
         }
     }
-
     return $stmt;
 }
+
 /**
  * Получает имя юзера из глобального массива $_SESSION.
  * @return string Возвращает имя юзера в виде строки, либо null
  */
-function get_user_name(){
-    if (isset($_SESSION['user']['name']) and !empty($_SESSION['user']['name'])){
+function get_user_name()
+{
+    if (isset($_SESSION['user']['name']) and !empty($_SESSION['user']['name'])) {
         return $_SESSION['user']['name'];
     }
     return null;
@@ -202,18 +196,20 @@ function get_user_name(){
  * Получает id юзера из глобального массива $_SESSION.
  * @return integer Возвращает числовое значение id, либо null
  */
-function get_user_id(){
-   if (isset($_SESSION['user']['id']) and !empty($_SESSION['user']['id']) and (int) ($_SESSION['user']['id']) > 0){
-       return (int) ($_SESSION['user']['id']);
-   }
-   return null;
+function get_user_id()
+{
+    if (isset($_SESSION['user']['id']) and !empty($_SESSION['user']['id']) and (int)($_SESSION['user']['id']) > 0) {
+        return (int)($_SESSION['user']['id']);
+    }
+    return null;
 }
 
 /**
  * Проверяет авторизован ли пользователь.
  * @return bool Возвращает булевое значение
  */
-function is_auth(){
+function is_auth()
+{
     $user_id = get_user_id();
     return $user_id > 0;
 }
@@ -251,11 +247,9 @@ function validate_category($id, $allowed_list)
  */
 function validate_length($value, $min, $max)
 {
-    if ($value) {
-        $len = strlen($value);
-        if ($len < $min or $len > $max) {
-            return "Значение должно быть от $min до $max символов";
-        }
+    $len = strlen($value);
+    if ($len < $min or $len > $max) {
+        return "Значение должно быть от $min до $max символов";
     }
 
     return null;
@@ -406,11 +400,11 @@ function format_date($date)
                 'часов назад'
             );
         return $new_date;
-    } else {
-        $date = date_create($date);
-        $new_date = date_format($date, 'd.m.y') . ' в ' . date_format($date, 'H:i');
-        return $new_date;
     }
+
+    $date = date_create($date);
+    $new_date = date_format($date, 'd.m.y') . ' в ' . date_format($date, 'H:i');
+    return $new_date;
 }
 
 /**
@@ -421,7 +415,7 @@ function format_date($date)
 function assign_class(&$items)
 {
     array_walk($items, function (&$item) {
-        if ((!empty($_SESSION['user'])) and $item['winner_user_id'] == $_SESSION['user']['id']) {
+        if ((!empty($_SESSION['user'])) and $item['winner_user_id'] === $_SESSION['user']['id']) {
             $item['bet_classname'] = 'rates__item--win';
             $item['timer_classname'] = 'timer--win';
             $item['timer'] = 'Ставка выиграла';
