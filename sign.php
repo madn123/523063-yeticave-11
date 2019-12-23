@@ -25,10 +25,10 @@ foreach ($required as $field => $field_name) {
     }
 }
 
-$error = validate_email($form['email'], $link);
-if ($error != null) {
-    $errors['email'] = $error;
-}
+$errors['email'] = validate_email($form['email'], $link);
+$errors['name'] = validate_length($form['name'], 3, 32);
+$errors['contacts'] = validate_length($form['contacts'], 3, 128);
+$errors = array_filter($errors);
 
 if (!empty($errors)) {
     print render('sign-up', 'Ошибка регистрации', ['errors' => $errors]);

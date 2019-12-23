@@ -9,7 +9,7 @@
             <label for="email">E-mail <sup>*</sup></label>
             <input id="email" type="text" name="email" placeholder="Введите e-mail"
                    value="<?= html_encode(get_post_val('email')); ?>">
-            <span class="form__error">Введите e-mail</span>
+            <span class="form__error"><?= $errors['email']; ?></span>
         </div>
 
         <?php $classname = isset($errors['pass']) ? "form__item--invalid " : ""; ?>
@@ -24,7 +24,7 @@
         <div class="form__item <?= $classname; ?>">
             <label for="name">Имя <sup>*</sup></label>
             <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= html_encode(get_post_val('name')); ?>">
-            <span class="form__error">Введите имя</span>
+            <span class="form__error"><?= $errors['name']; ?></span>
         </div>
 
         <?php $classname = isset($errors['contacts']) ? "form__item--invalid " : ""; ?>
@@ -32,7 +32,7 @@
             <label for="message">Контактные данные <sup>*</sup></label>
             <textarea id="message" name="contacts"
                       placeholder="Напишите как с вами связаться"><?= html_encode(get_post_val('contacts')); ?></textarea>
-            <span class="form__error">Напишите как с вами связаться</span>
+            <span class="form__error"><?= $errors['contacts']; ?></span>
         </div>
 
 
