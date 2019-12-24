@@ -6,7 +6,7 @@ if (is_auth()) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     print render('sign-up', 'Регистрация');
     die();
 }

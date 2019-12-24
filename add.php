@@ -10,7 +10,7 @@ if (!is_auth()) {
 $cats_ids = [];
 $cats_ids = array_column($categories, 'id');
 
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     print render('add-lot', 'Добавление лота');
     die();
 }

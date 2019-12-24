@@ -13,7 +13,7 @@
                             <h3 class="rates__title"><a
                                     href="lot.php?id=<?= $item['id']; ?>"><?= html_encode($item['name']); ?></a>
                             </h3>
-                            <?php if ($item['winner_user_id'] == get_user_id()): ?>
+                            <?php if ($item['winner_user_id'] === get_user_id()): ?>
                                 <p><?= html_encode($item['contacts']); ?></p>
                             <?php endif ?>
                         </div>

@@ -6,7 +6,7 @@ if (is_auth()) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
     $required = ['email' => '"E-mail"', 'pass' => '"Пароль"'];
     $errors = [];
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-if (!empty($errors) or $_SERVER['REQUEST_METHOD'] != 'POST') {
+if (!empty($errors) or $_SERVER['REQUEST_METHOD'] !== 'POST') {
     print render('login', 'Авторизация', ['errors' => $errors]);
     die();
 }

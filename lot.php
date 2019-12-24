@@ -1,7 +1,7 @@
 <?php
 require_once 'include/include.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cost = filter_input(INPUT_POST, 'cost', FILTER_DEFAULT);
     $id = filter_input(INPUT_POST, 'id', FILTER_DEFAULT);
 
