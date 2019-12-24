@@ -20,7 +20,8 @@
                     <option>Выберите категорию</option>
                     <?php foreach ($categories as $category): ?>
                         <option value="<?= $category['id']; ?>"
-                                <?= get_post_val('category_id') === $category['id'] ? 'selected="true"' : ''; ?>><?= $category['category_name']; ?></option>
+                                <?= get_post_val('category_id') == $category['id'] ? 'selected="true"' : ''; ?>><?= $category['category_name']; ?>
+                        </option>
                     <?php endforeach ?>
                 </select>
                 <span class="form__error">Выберите категорию</span>
